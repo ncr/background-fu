@@ -1,0 +1,61 @@
+BackgroundFu
+============
+
+Background tasks made dead simple.
+Any resemblance to ActiveRecord is purely coincidental.
+
+
+Example
+=======
+
+In lib/hard_worker.rb (or anywhere else):
+
+class HardWorker
+
+  def download_internets(options = {})
+    @progress = 0
+
+    sniff_the_tubes(options)
+    @progress = 20
+
+    internets = lick_the_tubes(options)
+    @progress = 100
+
+    internets
+  end
+  
+  def sniff_the_tubes(options)
+    sleep(10)
+  end
+  
+  def lick_the_tubes(options)
+    sleep(10)
+  end
+
+end
+
+
+In a controller:
+
+  def create
+    session[:job_id] = Background.jobs.create(HardWorker, :download_internets, params[:options]).id
+  end
+
+  def show
+    @job      = Background.jobs.find(session[:job_id])
+    @progress = @job.progress
+    @result   = @job.result if @job.finished?
+  end
+  
+  def index
+    @jobs = Background.jobs
+  end
+  
+  def destroy
+    id = session[:job_id]
+    Background.jobs.find(id).destroy
+  end
+  
+Enjoy!
+
+Copyright (c) 2007 Jacek Becela, released under the MIT license
