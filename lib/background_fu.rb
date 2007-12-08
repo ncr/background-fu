@@ -21,12 +21,12 @@ module Background
 
   class Job
 
-    attr_reader :worker, :result
+    attr_reader :result
 
     def initialize(klass, method, *args)
       @worker = klass.new
       @thread = Thread.new do
-        @result = worker.send!(method, *args)
+        @result = @worker.send!(method, *args)
       end
     end
     
@@ -35,7 +35,7 @@ module Background
     end
     
     def progress
-      worker.instance_variable_get("@progress")
+      @worker.instance_variable_get("@progress")
     end
     
     def finished?
