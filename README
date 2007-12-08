@@ -18,7 +18,7 @@ class HardWorker
     sniff_the_tubes(options)
     @progress = 20
 
-    internets = lick_the_tubes(options)
+    internets = pull_the_tubes(options)
     @progress = 100
 
     internets
@@ -28,8 +28,10 @@ class HardWorker
     sleep(10)
   end
   
-  def lick_the_tubes(options)
+  def pull_the_tubes(options)
     sleep(10)
+    
+    "porn"
   end
 
 end

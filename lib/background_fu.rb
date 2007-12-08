@@ -7,9 +7,9 @@ module Background
   class Jobs < Array
 
     def create(klass, method, *args)
-      returning(Job.new(klass, method, *args)) do |job|
-        push(job)
-      end
+      job = Job.new(klass, method, *args)
+      push(job)
+      job
     end
     
     undef find
@@ -21,10 +21,12 @@ module Background
 
   class Job
 
+    attr_reader :worker, :result
+
     def initialize(klass, method, *args)
       @worker = klass.new
       @thread = Thread.new do
-        @result = @worker.send!(method, *args)
+        @result = worker.send!(method, *args)
       end
     end
     
@@ -32,12 +34,8 @@ module Background
       object_id
     end
     
-    def result
-      @result
-    end
-    
     def progress
-      @worker.instance_variable_get("@progress")
+      worker.instance_variable_get("@progress")
     end
     
     def finished?
