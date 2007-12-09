@@ -24,6 +24,7 @@ module Background
     attr_reader :result
 
     def initialize(klass, method, *args)
+      ActiveRecord::Base.verify_active_connections! if defined?(ActiveRecord)
       @worker = klass.new
       @thread = Thread.new do
         @result = @worker.send!(method, *args)
