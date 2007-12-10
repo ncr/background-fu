@@ -4,6 +4,21 @@ BackgroundFu
 Background tasks made dead simple.
 Any resemblance to ActiveRecord is purely coincidental.
 
+Four things:
+
+1. If you have more than one Mongrel in your setup AND you want to be able to 
+  retrieve progress of a job or have the ability to stop it, you have to make 
+  your sessions "sticky". This will cause your browser to always hit the same 
+  mongrel (threads are tied to a Mongrel process). HAProxy can do that for you.
+
+2. One, single Ruby thread can block your entire process if it blocks
+   (dns queries, etc.). Keep that in mind.
+
+3. You don't have to remember to set allow_concurrency, BackgroundFu does that.
+
+4. You don't have to worry about stale database connections left after
+   finished threads. BackgroundFu closes them.
+
 
 Example
 =======
