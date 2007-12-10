@@ -4,7 +4,7 @@ BackgroundFu
 Background tasks made dead simple.
 Any resemblance to ActiveRecord is purely coincidental.
 
-Four things:
+Five things:
 
 1. If you have more than one Mongrel in your setup AND you want to be able to 
   retrieve progress of a job or have the ability to stop it, you have to make 
@@ -18,6 +18,11 @@ Four things:
 
 4. You don't have to worry about stale database connections left after
    finished threads. BackgroundFu closes them.
+
+5. In development mode, your code is reloaded on every request and the effect
+ is that threads get messed. Set config.cache_classes = true in your environment
+ (just like in production mode) to make your threads last longer than request.
+ This makes development a little incoveniet, but it works.
 
 
 Example
