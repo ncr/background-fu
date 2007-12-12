@@ -12,17 +12,8 @@ end
 
 while($running) do
 
-  if job = Background::Job.find(:first, :conditions => { :state => "pending" }, :order => "created_at")
-    begin
-      job.state  = "running"; job.save(false)
-      worker     = job.worker_class.camelize.constantize.new
-      job.result = worker.send!(job.worker_method, *job.args)
-      job.state  = "finished"
-    rescue 
-      job.state = "failed"
-    ensure
-      job.save(false)
-    end
+  if job = Background.jobs.find_in_state("pending")
+    job.get_done!
   else
     sleep 5
   end
