@@ -5,6 +5,10 @@ module Background
   end
 
   module Jobs
+    
+    def new(*args)
+      Job.new(*args)
+    end
 
     def create!(worker_class, worker_method, *args)
       Job.create!(
