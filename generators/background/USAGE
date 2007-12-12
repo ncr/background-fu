@@ -1,24 +1,6 @@
 Description:
     Generates migration to create jobs table (jobs queue).
     Creates example daemon which sequentially runs jobs from queue.
-    
-    You also need the daemon_generator plugin installed,
-    and have invoked: "./script/generate daemon background"
-    to create necessary daemon files (see daemon_generator docs).
-
-Quick start:
-    ./script/generate daemon background
-    ./script/generate background
-    rake db:migrate
-    ./script/daemons start
-    
-    then try in console:
-    
-    job_id = Background.jobs.create(ExampleWorker, :add, 1, 2).id
-    
-    ...  and after few seconds when background daemon completes the job ...
-    
-    Background.jobs.find(job_id).result should equal 3
 
 Example:
     ./script/generate background
