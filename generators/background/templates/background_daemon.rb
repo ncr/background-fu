@@ -5,7 +5,7 @@
 
 require File.dirname(__FILE__) + "/../../config/environment"
 
-# Setting this will enablee progress monitoring. The is optional.
+# Setting this will enable progress monitoring. The is optional.
 # ActiveRecord::Base.allow_concurrency = true
 
 $running = true;

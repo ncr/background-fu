@@ -4,12 +4,6 @@ module Background
     @@jobs ||= Jobs.new
   end
 
-  # Threads are optional. When enabled, they provide
-  # the ability to monitor job progress. 
-  def self.multi_threaded?
-    ActiveRecord::Base.allow_concurrency
-  end
-  
   class Jobs
     
     def new(*args)
@@ -116,5 +110,11 @@ module Background
     end
 
   end  
+
+  # Threads are optional. When enabled, they provide
+  # the ability to monitor job progress. 
+  def self.multi_threaded?
+    ActiveRecord::Base.allow_concurrency
+  end
 
 end
