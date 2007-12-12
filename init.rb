@@ -1,2 +1,3 @@
-ActiveRecord::Base.allow_concurrency = true if defined?(ActiveRecord)
+Dependencies.load_paths << "#{RAILS_ROOT}/lib/workers"
+
 require 'background_fu'

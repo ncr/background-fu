@@ -1,50 +1,65 @@
 module Background
 
   def self.jobs
-    @@jobs ||= Jobs.new
+    Job.find(:all, :order => "created_at").extend(Jobs)
   end
 
-  class Jobs < Array
+  module Jobs
 
-    def create(klass, method, *args)
-      job = Job.new(klass, method, *args)
-      push(job)
-      job
+    def create!(worker_class, worker_method, *args)
+      Job.create!(
+      :worker_class  => worker_class.to_s,
+      :worker_method => worker_method.to_s,
+      :args          => args
+      )
     end
     
-    undef find
+    def create(worker_class, worker_method, *args)
+      Job.create(
+      :worker_class  => worker_class.to_s,
+      :worker_method => worker_method.to_s,
+      :args          => args
+      )
+    end
+
     def find(id)
-      detect { |job| job.id == id }
+      Job.find(id)
     end
-    
+
+    def find_by_id(id)
+      Job.find_by_id(id)
+    end
+
+    def find_all_in_state(state)
+      Job.find_all_by_state(state, :order => "created_at")
+    end
+
   end
 
-  class Job
+  class Job < ActiveRecord::Base
+    
+    States = %w(pending running finished failed)
 
-    attr_reader :result
+    serialize :args,  Array
+    serialize :result
 
-    def initialize(klass, method, *args)
-      ActiveRecord::Base.verify_active_connections! if defined?(ActiveRecord)
-      @worker = klass.new
-      @thread = Thread.new do
-        @result = @worker.send!(method, *args)
+    before_validation_on_create :setup_state
+
+    validates_inclusion_of :state, :in => States
+    validates_presence_of :worker_class, :worker_method
+    
+    States.each do |state_name|
+      define_method("#{state_name}?") do
+        state == state_name
       end
     end
-    
-    def id
-      object_id
-    end
-    
-    def progress
-      @worker.instance_variable_get("@progress")
-    end
-    
-    def finished?
-      [false, nil].include?(@thread.status)
-    end
-    
-    def destroy
-      @thread.kill.status == false
+
+    private
+
+    def setup_state
+      return unless state.blank?
+
+      self.state = "pending" 
     end
 
   end  

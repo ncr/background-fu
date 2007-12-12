@@ -4,68 +4,28 @@ BackgroundFu
 Background tasks made dead simple.
 Any resemblance to ActiveRecord is purely coincidental.
 
-Five things:
-
-1. If you have more than one Mongrel in your setup AND you want to be able to 
-  retrieve progress of a job or have the ability to stop it, you have to make 
-  your sessions "sticky". This will cause your browser to always hit the same 
-  mongrel (threads are tied to a Mongrel process). HAProxy can do that for you.
-
-2. One, single Ruby thread can block your entire process if it blocks
-   (dns queries, etc.). Keep that in mind.
-
-3. You don't have to remember to set allow_concurrency, BackgroundFu does that.
-
-4. You don't have to worry about stale database connections left after
-   finished threads. BackgroundFu closes them.
-
-5. In development mode, your code is reloaded on every request and the effect
- is that threads get messed. Set config.cache_classes = true in your environment
- (just like in production mode) to make your threads last longer than request.
- This makes development a little incoveniet, but it works.
-
 
 Example
 =======
 
-In lib/hard_worker.rb (or anywhere else):
+In lib/workers/example_worker.rb:
 
-class HardWorker
+class ExampleWorker
 
-  def download_internets(options = {})
-    @progress = 0
-
-    sniff_the_tubes(options)
-    @progress = 20
-
-    internets = pull_the_tubes(options)
-    @progress = 100
-
-    internets
+  def add(a, b)
+    a + b
   end
   
-  def sniff_the_tubes(options)
-    sleep(10)
-  end
-  
-  def pull_the_tubes(options)
-    sleep(10)
-    
-    "porn"
-  end
-
 end
-
 
 In a controller:
 
   def create
-    session[:job_id] = Background.jobs.create(HardWorker, :download_internets, params[:options]).id
+    session[:job_id] = Background.jobs.create(ExampleWorker, :add, 1, 2).id
   end
 
   def show
     @job      = Background.jobs.find(session[:job_id])
-    @progress = @job.progress
     @result   = @job.result if @job.finished?
   end
   
