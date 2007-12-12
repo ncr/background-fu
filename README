@@ -8,6 +8,9 @@ Any resemblance to ActiveRecord is purely coincidental.
 Quick Start
 ===========
 
+Install Kyle Maxwell's daemon_generator plugin from
+http://svn.kylemaxwell.com/rails_plugins/daemon_generator/trunk
+
 ./script/generate daemon background
 ./script/generate background
 

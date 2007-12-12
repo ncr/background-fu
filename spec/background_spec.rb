@@ -2,12 +2,12 @@ require File.dirname(__FILE__) + "/spec_helper"
 
 describe Background do
   
-  it "should have jobs" do
-    Background.jobs.should be_an_instance_of(Background::Jobs)
-  end
-  
-  it "should initialize jobs once" do
-    Background.jobs.should == Background.jobs
+  it "should have jobs extended with Background::Jobs" do
+    jobs = stub(:jobs)
+    jobs.should_receive(:extend).with(Background::Jobs)
+    Background::Job.should_receive(:find).and_return(jobs)
+
+    Background.jobs
   end
 
 end
