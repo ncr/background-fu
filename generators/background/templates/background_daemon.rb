@@ -1,12 +1,6 @@
 #!/usr/bin/env ruby
 
-# You might want to change this
-# ENV["RAILS_ENV"] ||= "development"
-
 require File.dirname(__FILE__) + "/../../config/environment"
-
-# Setting this will enable progress monitoring. The is optional.
-# ActiveRecord::Base.allow_concurrency = true
 
 $running = true;
 Signal.trap("TERM") do 

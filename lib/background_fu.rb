@@ -50,7 +50,7 @@ module Background
 
   class Job < ActiveRecord::Base
 
-    States = %w(pending running finished failed)
+    States = %w(pending running stopping finished failed)
 
     serialize :args, Array
     serialize :result
@@ -60,9 +60,10 @@ module Background
     validates_inclusion_of :state, :in => States
     validates_presence_of :worker_class, :worker_method
 
+    # Every call to these methods fetches fresh state value from db.
     States.each do |state_name|
       define_method("#{state_name}?") do
-        state == state_name
+        reload.state == state_name
       end
     end
 
@@ -78,6 +79,14 @@ module Background
       save(false)
       cleanup_after_threads!
     end
+    
+    # When multithreading is enabled, you can ask a worker to terminate a job.
+    # Worker should periodically check if @should_stop is true and return if possible.
+    def stop!
+      if running? && Background.multi_threaded?
+        update_attribute(:state, "stopping")
+      end
+    end
 
     private
 
@@ -90,11 +99,21 @@ module Background
     def monitor_progress!
       Thread.new do
         while(running?)
-          if fresh_progress = @worker.instance_variable_get("@progress")
-            update_attribute(:progress, fresh_progress) unless progress == fresh_progress
+          current_progress = @worker.instance_variable_get("@progress")
+
+          if current_progress == progress 
+            sleep 5
+          else
+            update_attribute(:progress, current_progress)
+            sleep 1
           end
-          sleep 1
         end
+
+        # If stop! was called on running job, worker has @should_stop set to true.
+        if(stopping?)
+          @worker.instance_variable_set("@should_stop", true)
+        end
+
       end if Background.multi_threaded?
     end
 
