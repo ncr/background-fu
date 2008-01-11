@@ -73,7 +73,8 @@ module Background
       monitor_progress!
       self.result = @worker.send!(worker_method, *args)
       self.state = "finished"
-    rescue 
+    rescue Exception => e
+      self.result = [e.message, e.backtrace.join("\n")].join("\n")
       self.state = "failed"
     ensure
       save(false)
