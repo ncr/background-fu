@@ -48,7 +48,7 @@ module Background
     
   end
 
-  class MonitoredWorker
+  module WorkerMonitoring
     
     def record_progress(progress)
       @progress = progress.to_i
@@ -95,8 +95,8 @@ module Background
     
     # When multithreading is enabled, you can ask a worker to terminate a job.
     #
-    # The record_progress() method becomes available when your worker class inherits 
-    # from Background::MonitoredWorker.
+    # The record_progress() method becomes available when your worker class includes
+    # Background::WorkerMonitoring.
     #
     # Every time worker invokes record_progress() is a possible stopping place.
     #

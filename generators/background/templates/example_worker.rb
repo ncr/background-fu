@@ -8,9 +8,11 @@ class ExampleWorker
 end
 
 # Bonus features available if allow_concurrency is set to true!
-# Remeber to inherit from Background::MonitoredWorker.
+# Remeber to include Background::WorkerMonitoring.
 # Every place where record_progress is invoked is a possible stopping place.
-class ExampleMonitoredWorker < Background::MonitoredWorker
+class ExampleMonitoredWorker
+  
+  include Background::WorkerMonitoring
   
   def long_and_monitored
     my_progress = 0
