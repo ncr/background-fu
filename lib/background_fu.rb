@@ -48,6 +48,15 @@ module Background
     
   end
 
+  class MonitoredWorker
+    
+    def record_progress(progress)
+      @progress = progress.to_i
+      throw(:stopped) if @should_stop
+    end
+    
+  end
+
   class Job < ActiveRecord::Base
 
     States = %w(pending running stopping finished failed)
@@ -67,11 +76,14 @@ module Background
       end
     end
 
+    # Invoked by a background daemon.
     def get_done!
       update_attribute(:state, "running")
       @worker = worker_class.constantize.new
-      monitor_progress!
-      self.result = @worker.send!(worker_method, *args)
+      monitor_worker!
+      catch(:stopped) do
+        self.result = @worker.send!(worker_method, *args)
+      end
       self.state = "finished"
     rescue Exception => e
       self.result = [e.message, e.backtrace.join("\n")].join("\n")
@@ -82,9 +94,22 @@ module Background
     end
     
     # When multithreading is enabled, you can ask a worker to terminate a job.
-    # Worker should periodically check if @should_stop is true and return if possible.
+    #
+    # The record_progress() method becomes available when your worker class inherits 
+    # from Background::MonitoredWorker.
+    #
+    # Every time worker invokes record_progress() is a possible stopping place.
+    #
+    # How it works:
+    # 1. invoke job.stop! to set a state (stopping) in a db
+    # 2. Monitoring thread picks up the state change from db
+    #    and sets @should_stop to true in the worker.
+    # 3. The worker invokes a register_progress() somewhere during execution.
+    # 4. The register_progress() method throws :stopped symbol if @should_stop == true
+    # 5. The job catches the :stopped symbol and reacts upon it.
+    # 6. The job is stopped in a merciful way. No one gets harmed.
     def stop!
-      if running? && Background.multi_threaded?
+      if Background.multi_threaded? && running?
         update_attribute(:state, "stopping")
       end
     end
@@ -93,11 +118,12 @@ module Background
 
     # Don't get scared. ActiveRecord IS thread-safe.
     # To enable progress monitoring you have to manually
-    # set ActiveRecord::Base.allow_concurrency to true.
+    # set ActiveRecord::Base.allow_concurrency to true
     # in lib/daemons/background.rb.
+    # You don't need to enable multi-threading in your Rails app.
     # This is the only place where multi-threading occurs
     # in the plugin. Progress monitoring is optional.
-    def monitor_progress!
+    def monitor_worker!
       Thread.new do
         while(running?)
           current_progress = @worker.instance_variable_get("@progress")
@@ -114,7 +140,11 @@ module Background
         if(stopping?)
           @worker.instance_variable_set("@should_stop", true)
         end
-
+        
+        # Ensure last available progress is saved
+        if(finished?)
+          update_attribute(:progress, @worker.instance_variable_get("@progress"))
+        end
       end if Background.multi_threaded?
     end
 

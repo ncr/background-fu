@@ -4,6 +4,17 @@ BackgroundFu
 Background tasks made dead simple.
 Any resemblance to ActiveRecord is purely coincidental.
 
+Bonus features
+==============
+
+There are bonus features available if you enable multithreading in AR.
+
+These are: 
+ * monitoring progress (perfect for ajax progress bars)
+ * stopping a running worker in a merciful way.
+
+Read the code (short and easy) to discover them.
+
 
 Quick Start
 ===========
