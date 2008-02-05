@@ -19,16 +19,17 @@ Read the code (short and easy) to discover them.
 Quick Start
 ===========
 
-Install Kyle Maxwell's daemon_generator plugin from
-http://svn.kylemaxwell.com/rails_plugins/daemon_generator/trunk
+This plugin previously depended on Kyle Maxwell's daemon_generator plugin from
+http://svn.kylemaxwell.com/rails_plugins/daemon_generator/trunk but since it is not
+available now, I copied all the needed files.
 
-./script/generate daemon background
 ./script/generate background
 
 rake db:migrate
 
 ./script/daemons start
     
+
 then try in console:
     
 job_id = Background.jobs.create(ExampleWorker, :add, 1, 2).id
@@ -53,8 +54,9 @@ class ExampleWorker
 end
 
 # Bonus features available if allow_concurrency is set to true!
-# Remeber to inherit from Background::MonitoredWorker.
+# Remeber to include Background::MonitoredWorker.
 # Every place where record_progress is invoked is a possible stopping place.
+
 class ExampleMonitoredWorker
 
   include Background::WorkerMonitoring
@@ -94,6 +96,24 @@ In a controller:
     id = session[:job_id]
     Background.jobs.find(id).destroy
   end
+
+Handy Capistrano tasks:
+
+namespace :deploy do
+
+  desc "Run this after every successful deployment" 
+  task :after_default do
+    restart_background_fu
+  end
+
+end
+
+desc "Restart BackgroundFu daemon"
+task :restart_background_fu do
+  run "RAILS_ENV=production ruby #{current_path}/script/daemons stop"
+  run "RAILS_ENV=production ruby #{current_path}/script/daemons start"
+end
+
   
 Enjoy!
 

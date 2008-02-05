@@ -6,10 +6,14 @@ class BackgroundGenerator < Rails::Generator::Base
       end
 
       m.directory "lib/daemons"
-      m.file 'background_daemon.rb', 'lib/daemons/background.rb', :collision => :force # overwrite daemon stub
+      m.file 'background.rb', 'lib/daemons/background.rb'
+      m.file 'background_ctl', 'lib/daemons/background_ctl'
 
       m.directory "lib/workers"
       m.file 'example_worker.rb', 'lib/workers/example_worker.rb'
+      
+      m.file 'daemons.yml', 'config/daemons.yml'
+      m.file 'daemons', 'script/daemons'
     end
   end
 
