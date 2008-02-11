@@ -1,51 +1,7 @@
 module Background
   
   def self.jobs
-    @@jobs ||= Jobs.new
-  end
-
-  class Jobs
-    
-    def new(*args)
-      Job.new(*args)
-    end
-
-    def create!(worker_class, worker_method, *args)
-      Job.create!(
-        :worker_class  => worker_class.to_s,
-        :worker_method => worker_method.to_s,
-        :args          => args
-      )
-    end
-
-    def create(worker_class, worker_method, *args)
-      Job.create(
-        :worker_class  => worker_class.to_s,
-        :worker_method => worker_method.to_s,
-        :args          => args
-      )
-    end
-
-    def find(id)
-      Job.find(id)
-    end
-
-    def find_by_id(id)
-      Job.find_by_id(id)
-    end
-
-    def find_in_state(state)
-      Job.find_by_state(state, :order => "created_at")
-    end
-
-    def find_all_in_state(state)
-      Job.find_all_by_state(state, :order => "created_at")
-    end
-    
-    def method_missing(method, *args, &block)
-      Job.find(:all, :order => "created_at").send!(method, *args, &block)
-    end
-    
+    @@jobs ||= JobsProxy.new
   end
 
   module WorkerMonitoring
@@ -113,6 +69,12 @@ module Background
         update_attribute(:state, "stopping")
       end
     end
+    
+    def restart!
+      if Background.multi_threaded? && (finished? || failed?)
+        update_attributes(:result => nil, :progress => nil, :state => "pending")
+      end
+    end
 
     private
 
@@ -165,6 +127,30 @@ module Background
   # the ability to monitor job progress. 
   def self.multi_threaded?
     ActiveRecord::Base.allow_concurrency
+  end
+
+  # I wish I could fake a real has_many association...
+  class JobsProxy < BlankSlate
+    
+    def create!(worker_class, worker_method, *args)
+      Job.create!(
+        :worker_class  => worker_class.to_s,
+        :worker_method => worker_method.to_s,
+        :args          => args
+      )
+    end
+
+    def method_missing(method, *args, &block)
+      Job.find(:all, :order => "id desc").send!(method, *args, &block)
+    end
+
+    # Helper methods: Background.jobs.pending, etc.
+    Background::Job::States.each do |state_name|
+      define_method(state_name) do
+        Job.find_all_by_state(state_name, :order => "id desc")
+      end
+    end
+    
   end
 
 end
