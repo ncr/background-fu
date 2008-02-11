@@ -2,6 +2,9 @@
 
 require File.dirname(__FILE__) + "/../../config/environment"
 
+# Setting this will enable worker monitoring. The is optional.
+#ActiveRecord::Base.allow_concurrency = true
+
 $running = true;
 Signal.trap("TERM") do 
   $running = false
