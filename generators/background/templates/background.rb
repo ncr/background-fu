@@ -18,7 +18,7 @@ end
 
 while($running) do
 
-  if job = Background.jobs.find_in_state("pending")
+  if job = Background.jobs.pending.first
     job.get_done!
   else
     sleep 5
