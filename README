@@ -2,7 +2,7 @@ BackgroundFu
 ============
 
 Background tasks made dead simple.
-Any resemblance to ActiveRecord is purely coincidental.
+
 
 Bonus features
 ==============
@@ -12,6 +12,7 @@ There are bonus features available if you enable multithreading in AR.
 These are: 
  * monitoring progress (perfect for ajax progress bars)
  * stopping a running worker in a merciful way.
+ * restarting a failed or finished job.
 
 Read the code (short and easy) to discover them.
 
@@ -21,18 +22,15 @@ Quick Start
 
 This plugin previously depended on Kyle Maxwell's daemon_generator plugin from
 http://svn.kylemaxwell.com/rails_plugins/daemon_generator/trunk but since it is not
-available now, I copied all the needed files.
+available now, I copied all the needed files into BackgroundFu.
 
 ./script/generate background
-
 rake db:migrate
-
 ./script/daemons start
-    
 
 then try in console:
     
-job_id = Background.jobs.create(ExampleWorker, :add, 1, 2).id
+job_id = Background.jobs.create!(ExampleWorker, :add, 1, 2).id
     
 ...  and after few seconds when background daemon completes the job ...
     

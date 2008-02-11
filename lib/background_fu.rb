@@ -129,7 +129,6 @@ module Background
     ActiveRecord::Base.allow_concurrency
   end
 
-  # I wish I could fake a real has_many association...
   class JobsProxy < BlankSlate
     
     def create!(worker_class, worker_method, *args)
@@ -139,9 +138,14 @@ module Background
         :args          => args
       )
     end
-
+    
+    # I wish I could fake a real has_many association...
     def method_missing(method, *args, &block)
-      Job.find(:all, :order => "id desc").send!(method, *args, &block)
+      if Job.respond_to?(method)
+        Job.send!(method, *args, &block)
+      else
+        Job.find(:all, :order => "id desc").send!(method, *args, &block)
+      end
     end
 
     # Helper methods: Background.jobs.pending, etc.
