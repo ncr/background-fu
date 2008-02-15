@@ -39,8 +39,8 @@ job_id = Job.enqueue!(ExampleWorker, :add, 1, 2).id
 Job.find(job_id).result should equal 3
 
 
-Example
-=======
+Examples
+========
 
 In lib/workers/example_worker.rb:
 
@@ -83,11 +83,13 @@ In a controller:
 
   def create
     session[:job_id] = Job.enqueue!(ExampleWorker, :add, 1, 2).id
+    # or try the monitored worker: session[:job_id] = Job.enqueue(ExampleMonitoredWorker, :long_and_monitored)
   end
 
   def show
-    @job      = Job.find(session[:job_id])
-    @result   = @job.result if @job.finished?
+    @job    = Job.find(session[:job_id])
+    @result = @job.result if @job.finished?
+    # or check progress if your worker is monitored: @progress = @job.progress
   end
   
   def index

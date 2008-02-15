@@ -4,8 +4,3 @@ Description:
 
 Example:
     ./script/generate background
-
-    This will create:
-        db/migrate/xxx_create_jobs.rb
-        lib/workers/example_worker.rb
-        lib/daemons/background.rb

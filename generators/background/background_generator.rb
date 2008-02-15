@@ -11,6 +11,7 @@ class BackgroundGenerator < Rails::Generator::Base
 
       m.directory "lib/workers"
       m.file 'example_worker.rb', 'lib/workers/example_worker.rb'
+      m.file 'example_monitored_worker.rb', 'lib/workers/example_monitored_worker.rb'
       
       m.file 'daemons.yml', 'config/daemons.yml'
       m.file 'daemons', 'script/daemons'

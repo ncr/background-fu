@@ -1,5 +1,16 @@
 module Job::BonusFeatures
   
+  # Registering callbacks
+  def self.included(base)
+    base.send!(:define_method, :before_work) do
+      monitor_worker
+    end
+
+    base.send!(:define_method, :after_work) do
+      cleanup_after_threads
+    end
+  end
+  
   # When multithreading is enabled, you can ask a worker to terminate a job.
   #
   # The record_progress() method becomes available when your worker class includes
@@ -62,14 +73,6 @@ module Job::BonusFeatures
   # Closes database connections left after finished threads.
   def cleanup_after_threads
     ActiveRecord::Base.verify_active_connections!
-  end
-  
-  def before_work
-    monitor_worker
-  end
-  
-  def after_work
-    cleanup_after_threads
   end
   
 end
