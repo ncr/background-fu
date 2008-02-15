@@ -56,12 +56,12 @@ end
 In lib/workers/example_monitored_worker.rb:
 
 # Bonus features available if allow_concurrency is set to true!
-# Remeber to include Background::MonitoredWorker.
+# Remeber to include BackgroundFu::WorkerMonitoring.
 # Every place where record_progress is invoked is a possible stopping place.
 
 class ExampleMonitoredWorker
 
-  include Background::WorkerMonitoring
+  include BackgroundFu::WorkerMonitoring
   
   def long_and_monitored
     my_progress = 0
