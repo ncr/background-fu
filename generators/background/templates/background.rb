@@ -18,7 +18,7 @@ end
 
 while($running) do
 
-  if job = Background.jobs.pending.first
+  if job = Job.pending.first
     job.get_done!
   else
     sleep 5

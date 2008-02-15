@@ -8,6 +8,9 @@ Bonus features
 ==============
 
 There are bonus features available if you enable multithreading in AR.
+It is recommended to enable multithreading in lib/daemons/background.rb, 
+so only the daemon will be multi-threaded and your mongrels will still 
+operate on single-threaded AR.
 
 These are: 
  * monitoring progress (perfect for ajax progress bars)
@@ -30,11 +33,11 @@ rake db:migrate
 
 then try in console:
     
-job_id = Background.jobs.create!(ExampleWorker, :add, 1, 2).id
+job_id = Job.enqueue!(ExampleWorker, :add, 1, 2).id
     
 ...  and after few seconds when background daemon completes the job ...
     
-Background.jobs.find(job_id).result should equal 3
+Job.find(job_id).result should equal 3
 
 
 Example
@@ -78,21 +81,20 @@ end
 In a controller:
 
   def create
-    session[:job_id] = Background.jobs.create(ExampleWorker, :add, 1, 2).id
+    session[:job_id] = Job.enqueue!(ExampleWorker, :add, 1, 2).id
   end
 
   def show
-    @job      = Background.jobs.find(session[:job_id])
+    @job      = Job.find(session[:job_id])
     @result   = @job.result if @job.finished?
   end
   
   def index
-    @jobs = Background.jobs
+    @jobs = Job.find(:all)
   end
   
   def destroy
-    id = session[:job_id]
-    Background.jobs.find(id).destroy
+    Job.find(session[:job_id]).destroy
   end
 
 Handy Capistrano tasks:

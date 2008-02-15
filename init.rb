@@ -1,3 +1,5 @@
 Dependencies.load_paths << "#{RAILS_ROOT}/lib/workers"
 
-require 'background_fu'
+if ActiveRecord::Base.allow_concurrency
+  Job.send!(:include, Job::BonusFeatures)
+end
