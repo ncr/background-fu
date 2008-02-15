@@ -83,7 +83,7 @@ In a controller:
 
   def create
     session[:job_id] = Job.enqueue!(ExampleWorker, :add, 1, 2).id
-    # or try the monitored worker: session[:job_id] = Job.enqueue(ExampleMonitoredWorker, :long_and_monitored)
+    # or try the monitored worker: session[:job_id] = Job.enqueue!(ExampleMonitoredWorker, :long_and_monitored)
   end
 
   def show
