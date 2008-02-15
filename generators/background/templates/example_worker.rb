@@ -12,7 +12,7 @@ end
 # Every place where record_progress is invoked is a possible stopping place.
 class ExampleMonitoredWorker
   
-  include Background::WorkerMonitoring
+  include BackgroundFu::WorkerMonitoring
   
   def long_and_monitored
     my_progress = 0

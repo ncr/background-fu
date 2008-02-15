@@ -7,10 +7,7 @@ Background tasks made dead simple.
 Bonus features
 ==============
 
-There are bonus features available if you enable multithreading in AR.
-It is recommended to enable multithreading in lib/daemons/background.rb, 
-so only the daemon will be multi-threaded and your mongrels will still 
-operate on single-threaded AR.
+There are bonus features available if you enable multithreading in your environment.
 
 These are: 
  * monitoring progress (perfect for ajax progress bars)
@@ -27,9 +24,11 @@ This plugin previously depended on Kyle Maxwell's daemon_generator plugin from
 http://svn.kylemaxwell.com/rails_plugins/daemon_generator/trunk but since it is not
 available now, I copied all the needed files into BackgroundFu.
 
-./script/generate background
+./script/plugin install https://svn.trix.pl/public/background_fu/
+
+ruby ./script/generate background
 rake db:migrate
-./script/daemons start
+ruby ./script/daemons start
 
 then try in console:
     
@@ -53,6 +52,8 @@ class ExampleWorker
   end
 
 end
+
+In lib/workers/example_monitored_worker.rb:
 
 # Bonus features available if allow_concurrency is set to true!
 # Remeber to include Background::MonitoredWorker.
