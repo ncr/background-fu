@@ -58,7 +58,7 @@ class Job < ActiveRecord::Base
         state == state_name
       end
 
-      # BackgroundJob.running => array of running jobs, etc.
+      # Job.running => array of running jobs, etc.
       self.class.send!(:define_method, state_name) do
         find_all_by_state(state_name, :order => "id desc")
       end
