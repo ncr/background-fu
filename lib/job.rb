@@ -3,16 +3,17 @@
 # job = Job.enqueue!(MyWorker, :my_method, "my_arg_1", "my_arg_2")
 class Job < ActiveRecord::Base
 
-  States = %w(pending running stopping finished failed)
+  cattr_accessor :states
+  self.states = %w(pending running finished failed)
 
   serialize :args, Array
   serialize :result
 
-  before_validation_on_create :setup_state
-
-  validates_inclusion_of :state, :in => States
+  before_create :setup_state
   validates_presence_of :worker_class, :worker_method
-
+  
+  attr_readonly :worker_class, :worker_method, :args
+  
   def self.enqueue!(worker_class, worker_method, *args)
     create!(
       :worker_class  => worker_class.to_s,
@@ -21,43 +22,54 @@ class Job < ActiveRecord::Base
     )
   end
 
-  States.each do |state_name|
-    # Every call to these methods fetches fresh state value from db.
-    define_method("#{state_name}?") do
-      reload.state == state_name
-    end
-    
-    # BackgroundJob.running => array of running jobs, etc.
-    self.class.send!(:define_method, state_name) do
-      find_all_by_state(state_name, :order => "id desc")
-    end
-  end
-
   # Invoked by a background daemon.
   def get_done!
-    update_attribute(:state, "running")
-    @worker = worker_class.constantize.new
-    before_work
-    catch(:stopped) do
-      self.result = @worker.send!(worker_method, *args)
-    end
-    self.state = "finished"
+    initialize_worker
+    invoke_worker
   rescue Exception => e
-    self.result = [e.message, e.backtrace.join("\n")].join("\n")
-    self.state = "failed"
+    rescue_worker(e)
   ensure
-    save(false)
-    after_work
+    ensure_worker
   end
+  
+  def initialize_worker
+    update_attributes!(:started_at => Time.now, :state => "running")
+    @worker = worker_class.constantize.new
+  end
+  
+  def invoke_worker
+    self.result = @worker.send!(worker_method, *args)
+    self.state  = "finished"
+  end
+  
+  def rescue_worker(exception)
+    self.result = [exception.message, exception.backtrace.join("\n")].join("\n\n")
+    self.state  = "failed"
+  end
+  
+  def ensure_worker
+    self.progress = @worker.instance_variable_get("@progress")
+    save!
+  end
+
+  def self.generate_state_helpers
+    states.each do |state_name|
+      define_method("#{state_name}?") do
+        state == state_name
+      end
+
+      # BackgroundJob.running => array of running jobs, etc.
+      self.class.send!(:define_method, state_name) do
+        find_all_by_state(state_name, :order => "id desc")
+      end
+    end
+  end
+  generate_state_helpers
 
   def setup_state
     return unless state.blank?
 
     self.state = "pending" 
   end
-  
-  # callbacks
-  def before_work; end
-  def after_work; end
 
 end  

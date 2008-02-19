@@ -10,6 +10,7 @@ class CreateJobs < ActiveRecord::Migration
       t.integer :progress
       t.string  :state
       
+      t.timestamp :started_at
       t.timestamps
     end
   end

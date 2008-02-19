@@ -7,22 +7,19 @@ Background tasks made dead simple.
 Bonus features
 ==============
 
-There are bonus features available if you enable multithreading in your environment.
+There are bonus features available if you call
+BackgroundFu.enable_bonus_features in lib/daemons/background.rb.
+This is enabled by default.
 
-These are: 
+These features are: 
  * monitoring progress (perfect for ajax progress bars)
  * stopping a running worker in a merciful way.
- * restarting a failed or finished job.
+ * restarting a failed or stopped job.
 
 Read the code (short and easy) to discover them.
 
-
 Quick Start
 ===========
-
-This plugin previously depended on Kyle Maxwell's daemon_generator plugin from
-http://svn.kylemaxwell.com/rails_plugins/daemon_generator/trunk but since it is not
-available now, I copied all the needed files into BackgroundFu.
 
 ./script/plugin install https://svn.trix.pl/public/background_fu/
 
@@ -44,7 +41,7 @@ Examples
 
 In lib/workers/example_worker.rb:
 
-# Simple, non-monitored worker, for those who don't believe in multi-threading.
+# Simple, non-monitored worker.
 class ExampleWorker
   
   def add(a, b)
@@ -55,10 +52,7 @@ end
 
 In lib/workers/example_monitored_worker.rb:
 
-# Bonus features available if allow_concurrency is set to true!
 # Remeber to include BackgroundFu::WorkerMonitoring.
-# Every place where record_progress is invoked is a possible stopping place.
-
 class ExampleMonitoredWorker
 
   include BackgroundFu::WorkerMonitoring

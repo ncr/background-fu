@@ -1,18 +1,28 @@
 module Job::BonusFeatures
   
-  # Registering callbacks
   def self.included(base)
-    base.send!(:define_method, :before_work) do
-      monitor_worker
-    end
+    base.states += %w(stopping stopped)
+    base.generate_state_helpers
 
-    base.send!(:define_method, :after_work) do
-      cleanup_after_threads
-    end
+    base.alias_method_chain :invoke_worker, :threads
+    base.alias_method_chain :ensure_worker, :threads
   end
   
-  # When multithreading is enabled, you can ask a worker to terminate a job.
-  #
+  def invoke_worker_with_threads
+    monitor_worker
+    
+    res = catch(:stopping) do
+      invoke_worker_without_threads; nil
+    end
+    
+    self.state = res ? "stopped" : "finished"
+  end
+
+  def ensure_worker_with_threads
+    ensure_worker_without_threads
+    cleanup_after_threads
+  end
+  
   # The record_progress() method becomes available when your worker class includes
   # Background::WorkerMonitoring.
   #
@@ -21,36 +31,39 @@ module Job::BonusFeatures
   # How it works:
   # 1. invoke job.stop! to set a state (stopping) in a db
   # 2. Monitoring thread picks up the state change from db
-  #    and sets @should_stop to true in the worker.
+  #    and sets @stopping to true in the worker.
   # 3. The worker invokes a register_progress() somewhere during execution.
-  # 4. The record_progress() method throws :stopped symbol if @should_stop == true
-  # 5. The job catches the :stopped symbol and reacts upon it.
+  # 4. The record_progress() method throws :stopping symbol if @stopping == true
+  # 5. The job catches the :stopping symbol and reacts upon it.
   # 6. The job is stopped in a merciful way. No one gets harmed.
   def stop!
-    if running?
-      update_attribute(:state, "stopping")
-    end
+    update_attribute(:state, "stopping") if running?
   end
   
   def restart!
-    if finished? || failed?
-      update_attributes(:result => nil, :progress => nil, :state => "pending")
+    if stopped? || failed? 
+      update_attributes!(
+        :result     => nil, 
+        :progress   => nil, 
+        :started_at => nil, 
+        :state      => "pending"
+      )
     end
   end
 
-  # Don't get scared. ActiveRecord IS thread-safe.
-  # To enable progress monitoring you have to manually
-  # set ActiveRecord::Base.allow_concurrency to true
-  # in lib/daemons/background.rb.
   # You don't need to enable multi-threading in your Rails app.
   # This is the only place where multi-threading occurs
-  # in the plugin. Progress monitoring is optional.
+  # in the plugin and is completely optional.
+  # You can disable these features by commenting out
+  # BackgroundFu.enable_bonus_features in lib/daemons/background.rb.
   def monitor_worker
     Thread.new do
-      while(running?)
+      # 1. running? - check if not failed or finished.
+      # 2. !Job.find(id).stopping? - check if someone ordered stopping the job.  
+      while(running? && !Job.find(id).stopping?)
         current_progress = @worker.instance_variable_get("@progress")
 
-        if current_progress == progress 
+        if current_progress == progress
           sleep 5
         else
           update_attribute(:progress, current_progress)
@@ -58,14 +71,9 @@ module Job::BonusFeatures
         end
       end
 
-      # If stop! was called on running job, worker has @should_stop set to true.
-      if(stopping?)
-        @worker.instance_variable_set("@should_stop", true)
-      end
-      
-      # Ensure last available progress is saved
-      if(finished?)
-        update_attribute(:progress, @worker.instance_variable_get("@progress"))
+      # If someone ordered stopping a job we infrom the worker that it should stop.
+      if(Job.find(id).stopping?)
+        @worker.instance_variable_set("@stopping", true)
       end
     end
   end
@@ -75,4 +83,13 @@ module Job::BonusFeatures
     ActiveRecord::Base.verify_active_connections!
   end
   
+  def elapsed
+    (updated_at - started_at).to_i if !pending?
+  end
+  
+  # seconds to go, based on estimated and progress
+  def estimated
+    ((elapsed * 100) / progress) - elapsed if running? && (1..99).include?(progress.to_i)
+  end
+
 end

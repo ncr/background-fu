@@ -1,4 +1,4 @@
-# Simple, non-monitored worker, for those who don't believe in multi-threading.
+# Simple, non-monitored worker.
 class ExampleWorker
   
   def add(a, b)

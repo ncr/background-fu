@@ -1,8 +1,6 @@
-# Remember to enable allow_concurrency in your environment 
-# and include Background::WorkerMonitoring.
-# Every place where record_progress is invoked is a possible stopping place.
 class ExampleMonitoredWorker
   
+  # After including woker monitoring you can invoke record_progress() method.
   include BackgroundFu::WorkerMonitoring
   
   def long_and_monitored
