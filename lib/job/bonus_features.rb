@@ -50,9 +50,8 @@ module Job::BonusFeatures
     ) if stopped? || failed?
   end
 
-  # You don't need to enable multi-threading in your Rails app.
-  # This is the only place where multi-threading occurs
-  # in the plugin and is completely optional.
+  # This is the only place where multi-threading 
+  # is used in the plugin and is completely optional.
   def monitor_worker
     Thread.new do
       # 1. running? - check if not failed or finished.
