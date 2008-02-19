@@ -2,10 +2,6 @@
 
 require File.dirname(__FILE__) + "/../../config/environment"
 
-# Progress monitoring, stopping/restarting jobs.
-# Comment this out if you don't need these features.
-BackgroundFu.enable_bonus_features
-
 Signal.trap("TERM") { exit }
 
 loop do

@@ -1,6 +1,6 @@
 class ExampleMonitoredWorker
   
-  # After including woker monitoring you can invoke record_progress() method.
+  # After including worker monitoring you can invoke record_progress() method.
   include BackgroundFu::WorkerMonitoring
   
   def long_and_monitored

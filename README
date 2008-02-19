@@ -7,9 +7,9 @@ Background tasks made dead simple.
 Bonus features
 ==============
 
-There are bonus features available if you call
-BackgroundFu.enable_bonus_features in lib/daemons/background.rb.
-This is enabled by default.
+There are bonus features available if you set
+ActiveRecord::Base.allow_concurrency = true 
+in your environment.
 
 These features are: 
  * monitoring progress (perfect for ajax progress bars)

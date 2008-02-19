@@ -54,8 +54,6 @@ module Job::BonusFeatures
   # You don't need to enable multi-threading in your Rails app.
   # This is the only place where multi-threading occurs
   # in the plugin and is completely optional.
-  # You can disable these features by commenting out
-  # BackgroundFu.enable_bonus_features in lib/daemons/background.rb.
   def monitor_worker
     Thread.new do
       # 1. running? - check if not failed or finished.
