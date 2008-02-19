@@ -6,6 +6,7 @@ module Job::BonusFeatures
 
     base.alias_method_chain :invoke_worker, :threads
     base.alias_method_chain :ensure_worker, :threads
+    base.alias_method_chain :restart!,      :threads
   end
   
   def invoke_worker_with_threads
@@ -41,7 +42,7 @@ module Job::BonusFeatures
   end
   
   # Overwritten because of new "stopped" state.
-  def restart!
+  def restart_with_threads!
     update_attributes!(
       :result     => nil, 
       :progress   => nil, 
