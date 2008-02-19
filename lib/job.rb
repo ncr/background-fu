@@ -32,6 +32,16 @@ class Job < ActiveRecord::Base
     ensure_worker
   end
   
+  # Restart a failed job.
+  def restart!
+    update_attributes!(
+      :result     => nil, 
+      :progress   => nil, 
+      :started_at => nil, 
+      :state      => "pending"
+    ) if failed? 
+  end
+  
   def initialize_worker
     update_attributes!(:started_at => Time.now, :state => "running")
     @worker = worker_class.constantize.new

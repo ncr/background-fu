@@ -40,15 +40,14 @@ module Job::BonusFeatures
     update_attribute(:state, "stopping") if running?
   end
   
+  # Overwritten because of new "stopped" state.
   def restart!
-    if stopped? || failed? 
-      update_attributes!(
-        :result     => nil, 
-        :progress   => nil, 
-        :started_at => nil, 
-        :state      => "pending"
-      )
-    end
+    update_attributes!(
+      :result     => nil, 
+      :progress   => nil, 
+      :started_at => nil, 
+      :state      => "pending"
+    ) if stopped? || failed?
   end
 
   # You don't need to enable multi-threading in your Rails app.
