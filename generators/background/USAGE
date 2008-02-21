@@ -1,5 +1,3 @@
 Examples:
-    ./script/generate background Job
-    ./script/generate background Admin::Job
-    ./script/generate background Admin::BackgroundJob
+    ./script/generate background
     

@@ -1,4 +1,4 @@
-class BackgroundGenerator < Rails::Generator::NamedBase
+class BackgroundGenerator < Rails::Generator::Base
 
   default_options :skip_migration => false, :skip_scaffold => false, :skip_examples => false
 
@@ -28,14 +28,15 @@ class BackgroundGenerator < Rails::Generator::NamedBase
         m.directory 'app/views/admin'
         m.directory 'app/views/layouts/admin'
 
-        m.file 'scaffold/jobs_controller.rb', 'app/controller/admin/jobs_controller.rb'
+        m.file 'scaffold/jobs_controller.rb', 'app/controllers/admin/jobs_controller.rb'
         m.file 'scaffold/jobs_helper.rb',     'app/helpers/admin/jobs_helper.rb'
 
         m.file 'scaffold/index.html.erb',               'app/views/admin/jobs/index.html.erb'
         m.file 'scaffold/_job.html.erb',                'app/views/admin/jobs/_job.html.erb'
         m.file 'scaffold/_job_deleted.html.erb',        'app/views/admin/jobs/_job_deleted.html.erb'
         m.file 'scaffold/_progress_indicator.html.erb', 'app/views/admin/jobs/_progress_indicator.html.erb'
-        m.file 'scaffold/jobs.html.erb',                'app/views/admin/layouts/jobs.html.erb'
+
+        m.file 'scaffold/jobs.html.erb', 'app/views/layouts/admin/jobs.html.erb'
 
         m.file "scaffold/background_fu.css", "public/stylesheets/background_fu.css"
         
