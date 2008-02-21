@@ -1,0 +1,5 @@
+<div class="progress-indicator">
+  <span class="bar <%= state %>" style="width: <%= progress %>%;"></span>
+  <span class="label elapsed"><%= seconds_in_short(elapsed) if elapsed.to_i > 0 %></span>
+  <span class="label estimated"><%= seconds_in_short(estimated) if estimated.to_i > 0 %></span>
+</div>

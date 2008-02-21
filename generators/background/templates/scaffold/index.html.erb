@@ -1,0 +1,28 @@
+<div>
+  <%#= submit_to_remote(nil, "Delete all finished", :url => "#") %>
+  <%#= submit_to_remote(nil, "Delete all failed", :url => "#") %>
+</div>
+
+<div>
+  <% form_for(:job) do |f| %>
+    <%= f.label :worker_class %><br />
+    <%= f.text_field :worker_class %><br />
+    <%= f.label :worker_method %><br />
+    <%= f.text_field :worker_method %><br />
+    <%= f.label :args, "Args (Each line is interpreted as a string argument)" %><br />
+    <%= f.text_area :args %><br />
+    <%= f.submit "Enqueue" %><br />
+  <% end %>
+</div>
+
+<table>
+  <% @jobs.each do |job| %>
+    <%= render :partial => "job", :locals => {:job => job} %>
+    <%= periodically_call_remote(
+      :url       => job_path(job), 
+      :method    => "get", 
+      :interval  => 5, 
+      :condition => "/^(running|pending|stopping)$/.match(job_state_#{dom_id(job)})")
+    %>  
+  <% end %>
+</table>

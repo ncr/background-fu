@@ -1,0 +1,11 @@
+.progress-indicator { height: 2em; width: 30em; position: relative; border: 1px solid #536070; background-color: #A8B1BC; }
+.progress-indicator span { position: absolute; height: 100%;}
+.progress-indicator .bar.running  { background-color: #1687C2; }
+.progress-indicator .bar.finished { background-color: #00AF00; }
+.progress-indicator .bar.stopping { background-color: orange; }
+.progress-indicator .bar.stopped  { background-color: #E90000; }
+.progress-indicator .bar.failed   { background-color: #C90000; }
+
+.progress-indicator .label { width: 100%; font-size: 1.5em; line-height: 1.5em; font-weight: bold; font-family: "Myriad Pro", sans-serif; color: white; }
+.progress-indicator .elapsed { margin-left: 2%;}
+.progress-indicator .estimated { margin-left: 85%;}
