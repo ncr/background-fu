@@ -1,4 +1,4 @@
-class JobsController < ApplicationController
+class Admin::JobsController < Admin::ApplicationController
 
   def index
     @jobs = Job.find(:all)
@@ -22,7 +22,7 @@ class JobsController < ApplicationController
     @job = Job.new(params[:job])
     
     if @job.save
-      redirect_to jobs_path
+      redirect_to admin_jobs_path
     else
       render :action => "new"
     end

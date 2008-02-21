@@ -1,4 +1,4 @@
-module JobsHelper
+module Admin::JobsHelper
 
   def seconds_in_short(seconds)
     seconds = seconds.to_i

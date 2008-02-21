@@ -19,7 +19,7 @@
   <% @jobs.each do |job| %>
     <%= render :partial => "job", :locals => {:job => job} %>
     <%= periodically_call_remote(
-      :url       => job_path(job), 
+      :url       => admin_job_path(job), 
       :method    => "get", 
       :interval  => 5, 
       :condition => "/^(running|pending|stopping)$/.match(job_state_#{dom_id(job)})")

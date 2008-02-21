@@ -1,6 +1,5 @@
-Description:
-    Generates migration to create jobs table (jobs queue).
-    Creates example daemon which sequentially runs jobs from queue.
-
-Example:
-    ./script/generate background
+Examples:
+    ./script/generate background Job
+    ./script/generate background Admin::Job
+    ./script/generate background Admin::BackgroundJob
+    
