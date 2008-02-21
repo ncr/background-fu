@@ -81,7 +81,7 @@ module Job::BonusFeatures
   end
   
   def elapsed
-    (updated_at - started_at).to_i if !pending?
+    (updated_at.to_f - started_at.to_f).to_i if !pending?
   end
   
   # seconds to go, based on estimated and progress
