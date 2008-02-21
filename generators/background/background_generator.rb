@@ -25,7 +25,7 @@ class BackgroundGenerator < Rails::Generator::Base
       unless options[:skip_scaffold]
         m.directory 'app/controllers/admin'
         m.directory 'app/helpers/admin'
-        m.directory 'app/views/admin'
+        m.directory 'app/views/admin/jobs'
         m.directory 'app/views/layouts/admin'
 
         m.file 'scaffold/jobs_controller.rb', 'app/controllers/admin/jobs_controller.rb'
