@@ -8,7 +8,13 @@ class Admin::JobsController < Admin::ApplicationController
     @job = Job.find(params[:id])
 
     respond_to do |format|
-      format.html
+      format.text do 
+        if @job.result.respond_to?(:join)
+          send_data @job.result.join("\n"), :type => "text/plain", :disposition => "attachment"
+        else
+          render :nothing => true, :status => 404
+        end
+      end
       format.js do
         render :update do |page|
           page[@job].replace :partial => "job"

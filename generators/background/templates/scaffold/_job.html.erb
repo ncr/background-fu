@@ -7,7 +7,8 @@
       <%= link_to_remote("Restart", :url => admin_job_path(job, :command => "restart"), :method => :put, :confirm => "Are you sure?") %> <br />
       <%= link_to_remote("Delete", :url => admin_job_path(job), :method => :delete, :confirm => "Are you sure?") %>
     <% when "finished", "pending" %>
-      <%= link_to_remote("Delete", :url => admin_job_path(job), :method => :delete, :confirm => "Are you sure?") %>
+      <%= link_to_remote("Delete", :url => admin_job_path(job), :method => :delete, :confirm => "Are you sure?") %><br />
+      <%= link_to("Download result", formatted_admin_job_path(job, :txt)) if job.result.respond_to?(:join) %>
     <% end %>
     <br />
   </td>
