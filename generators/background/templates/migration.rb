@@ -13,6 +13,7 @@ class CreateJobs < ActiveRecord::Migration
       t.timestamp :started_at
       t.timestamps
     end
+    add_index :jobs, :state
   end
 
   def self.down
