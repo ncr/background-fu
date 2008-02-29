@@ -16,5 +16,17 @@ module Admin::JobsHelper
       return "#{seconds} s"
     end
   end
+  
+  def time_ago_in_words_with_customization(time)
+    if time
+      "#{time_ago_in_words(time)} ago"
+    else
+      "n/a"
+    end
+  end
+  
+  def downloadable?(job)
+    job.result.respond_to?(:join)
+  end
 
 end

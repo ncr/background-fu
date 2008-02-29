@@ -1,34 +1,39 @@
-<tr class="job" id="<%= dom_id(job) %>">
-  <td class="checkbox">
-    <% case job.state
-      when "running" %>
-      <%= link_to_remote("Stop", :url => admin_job_path(job, :command => "stop"), :method => :put, :confirm => "Are you sure?") %>
-    <% when "failed", "stopped"  %>
-      <%= link_to_remote("Restart", :url => admin_job_path(job, :command => "restart"), :method => :put, :confirm => "Are you sure?") %> <br />
-      <%= link_to_remote("Delete", :url => admin_job_path(job), :method => :delete, :confirm => "Are you sure?") %>
-    <% when "finished", "pending" %>
-      <%= link_to_remote("Delete", :url => admin_job_path(job), :method => :delete, :confirm => "Are you sure?") %><br />
-      <%= link_to("Download result", formatted_admin_job_path(job, :txt)) if job.result.respond_to?(:join) %>
-    <% end %>
-    <br />
-  </td>
-  <td class="progress">
-    <%= render :partial => "progress_indicator", 
-      :locals => {
-        :progress  => job.progress, 
-        :elapsed   => job.elapsed,
-        :estimated => job.estimated,
-        :state     => job.state
-      } 
-    %>
-  </td>
-  <td class="info">
-    <%= h job.inspect %>
-  </td>
-  <script type="text/javascript">
-    //<![CDATA[
-      job_state_<%= dom_id(job) %> = "<%= job.state %>";
-    //]]>
-  </script>
-</tr>
-
+<td class="checkbox">
+  <% case job.state
+    when "running" %>
+    <%= link_to_remote("Stop", :url => admin_job_path(job, :command => "stop"), :method => :put, :confirm => "Are you sure?") %>
+  <% when "failed", "stopped"  %>
+    <%= link_to_remote("Restart", :url => admin_job_path(job, :command => "restart"), :method => :put, :confirm => "Are you sure?") %> <br />
+    <%= link_to_remote("Delete", :url => admin_job_path(job), :method => :delete, :confirm => "Are you sure?") %>
+  <% when "finished", "pending" %>
+    <%= link_to_remote("Delete", :url => admin_job_path(job), :method => :delete, :confirm => "Are you sure?") %><br />
+    <%= link_to("Download result", formatted_admin_job_path(job, :txt)) if downloadable?(job) %>
+  <% end %>
+  <br />
+</td>
+<td class="progress">
+  <%= render :partial => "progress_indicator", 
+    :locals => {
+      :progress  => job.progress, 
+      :elapsed   => job.elapsed,
+      :estimated => job.estimated,
+      :state     => job.state
+    } 
+  %>
+</td>
+<td class="info">
+  <h2><%= job.worker_class %>.new.<%= job.worker_method %>( <strong><%= h truncate(job.args.map(&:inspect).join(", "), 255) %></strong> )</h2>
+  <p>
+    started at: <strong><%= time_ago_in_words_with_customization(job.started_at) %></strong>,
+    created at: <strong><%= time_ago_in_words_with_customization(job.created_at) %></strong>,
+    updated at: <strong><%= time_ago_in_words_with_customization(job.updated_at) %></strong>,<br />
+    state:      <strong><%= job.state %></strong>,
+    progress:   <strong><%= job.progress || "n/a" %></strong>,
+    result:     <strong><%=h truncate(job.result.inspect, 255) %></strong>
+  </p>
+</td>
+<script type="text/javascript">
+  //<![CDATA[
+    job_state_<%= dom_id(job) %> = "<%= job.state %>";
+  //]]>
+</script>

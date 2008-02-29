@@ -1,7 +1,7 @@
 class Admin::JobsController < Admin::ApplicationController
 
   def index
-    @jobs = Job.find(:all)
+    @jobs = Job.find(:all, :order => "id desc")
   end
 
   def show
@@ -17,7 +17,7 @@ class Admin::JobsController < Admin::ApplicationController
       end
       format.js do
         render :update do |page|
-          page[@job].replace :partial => "job"
+          page[@job].replace_html :partial => "job"
         end
       end
     end
@@ -44,7 +44,7 @@ class Admin::JobsController < Admin::ApplicationController
     end
 
     render :update do |page|
-      page[@job].replace :partial => "job"
+      page[@job].replace_html :partial => "job"
     end
   end
 
@@ -53,7 +53,7 @@ class Admin::JobsController < Admin::ApplicationController
     @job.destroy
 
     render :update do |page|
-      page[@job].replace :partial => "job_deleted", :object => @job
+      page[@job].replace_html :partial => "job_deleted", :object => @job
     end
   end
 

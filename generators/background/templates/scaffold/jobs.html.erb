@@ -2,10 +2,21 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <title>Background Jobs - BackgroundFu</title>
+  <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.5.0/build/reset-fonts-grids/reset-fonts-grids.css"> 
+  <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.5.0/build/base/base-min.css"> 
+  <style type="text/css"> 
+    #custom-doc { width: 90%; min-width: 250px; } 
+  </style>
   <%= javascript_include_tag :defaults %>
   <%= stylesheet_link_tag 'background_fu' %>
 </head>
 <body>
-  <%= yield %>
+  <div id="custom-doc" class="yui-t7">
+    <div id="hd"><h1>BackgroundFu Jobs</h1></div> 
+    <div id="bd"><div class="yui-g"> 
+      <%= yield %>
+    </div></div> 
+    <div id="ft" style="text-align: center;"><a href="http://trix.pl/background_fu">BackgroundFu</a> Running Background Jobs Made Dead Simple <a href="http://trix.pl">Jacek Becela</a> 2008 </div> 
+  </div>
 </body>
 </html>

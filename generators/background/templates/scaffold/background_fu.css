@@ -1,4 +1,4 @@
-.progress-indicator { height: 2em; width: 30em; position: relative; border: 1px solid #536070; background-color: #A8B1BC; }
+.progress-indicator { height: 6em; width: 30em; position: relative; border: 1px solid #536070; background-color: #A8B1BC; }
 .progress-indicator span { position: absolute; height: 100%;}
 .progress-indicator .bar.running  { background-color: #1687C2; }
 .progress-indicator .bar.finished { background-color: #00AF00; }
@@ -7,5 +7,17 @@
 .progress-indicator .bar.failed   { background-color: #C90000; }
 
 .progress-indicator .label { width: 100%; font-size: 1.5em; line-height: 1.5em; font-weight: bold; font-family: "Myriad Pro", sans-serif; color: white; }
-.progress-indicator .elapsed { margin-left: 2%;}
-.progress-indicator .estimated { margin-left: 85%;}
+.progress-indicator .elapsed { margin-left: 2%; }
+.progress-indicator .estimated { margin-left: 85%; }
+
+table.jobs td { border: none; vertical-align: top; color: #555; border-bottom: 1px solid white; }
+table.jobs tr.even td{ background-color: #f6f6f6; }
+table.jobs tr.odd td { background-color: #efefef; }
+table.jobs td h2 { margin-top: 0; }
+table.jobs strong { color: #000; font-weight: bold; }
+
+form.job input { margin: 0 0 1em 0; }
+form.job textarea { width: 50%; }
+form.job input.worker-class  { font-size: 2em; font-weight: bold; width: 33%; }
+form.job input.worker-method { font-size: 1.5em; font-weight: bold; width: 33%; }
+form.job input.button { font-size: 1.2em; font-weight: bold; }

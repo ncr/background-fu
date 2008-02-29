@@ -1,23 +1,22 @@
 <div>
-  <%#= submit_to_remote(nil, "Delete all finished", :url => "#") %>
-  <%#= submit_to_remote(nil, "Delete all failed", :url => "#") %>
-</div>
-
-<div>
-  <% form_for(:job) do |f| %>
+  <% form_for(:job, :html => {:class => "job"}) do |f| %>
     <%= f.label :worker_class %><br />
-    <%= f.text_field :worker_class %><br />
+    <%= f.text_field :worker_class, :class => "worker-class" %><br />
     <%= f.label :worker_method %><br />
-    <%= f.text_field :worker_method %><br />
-    <%= f.label :args, "Args (Each line is interpreted as a string argument)" %><br />
+    <%= f.text_field :worker_method, :class => "worker-method" %><br />
+    <%= f.label :args, "Args - each line (including empty) is interpreted as a string argument" %><br />
     <%= f.text_area :args %><br />
-    <%= f.submit "Enqueue" %><br />
+    <%= f.submit "Enqueue", :class => "button" %><br />
   <% end %>
 </div>
 
-<table>
+<hr style="visibility:hidden; margin: 20px auto" />
+
+<table class="jobs">
   <% @jobs.each do |job| %>
+    <tr class="job <%= cycle(:odd, :even) %>" id="<%= dom_id(job) %>">
     <%= render :partial => "job", :locals => {:job => job} %>
+    </tr>
     <%= periodically_call_remote(
       :url       => admin_job_path(job), 
       :method    => "get", 
