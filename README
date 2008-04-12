@@ -3,17 +3,18 @@ BackgroundFu
 
 Background tasks made dead simple.
 
-GitHub: 
+GitHub:
   git://github.com/ncr/background-fu.git
 
-Lighthouse: 
+Lighthouse:
   http://trix.lighthouseapp.com/projects/9809-backgroundfu/overview
   
 Campfire (guest access, no account required):
   http://ncr.campfirenow.com/67482
 
-Subversion (deprecated, will be available, but will not mirror github commits): 
+Subversion (deprecated, will be available, but will not mirror github commits):
   https://svn.trix.pl/public/background_fu/
+
 
 Bonus features
 ==============
