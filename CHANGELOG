@@ -1,0 +1,1 @@
+* 2008-05-11 Added three columns to Job model: priority (execute jobs in priority descending order), start_at (execute jobs after start_at), lock_version (ensure job is executed by a single daemon). [ncr]
