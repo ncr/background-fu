@@ -9,7 +9,7 @@ class Job < ActiveRecord::Base
   serialize :args, Array
   serialize :result
 
-  before_create :setup_state
+  before_create :setup_state, :setup_priority, :setup_start_at
   validates_presence_of :worker_class, :worker_method
   
   attr_readonly :worker_class, :worker_method, :args
@@ -60,6 +60,9 @@ class Job < ActiveRecord::Base
   def ensure_worker
     self.progress = @worker.instance_variable_get("@progress")
     save!
+  rescue StaleObjectError
+    # Ignore this exception as its only purpose is
+    # not allowing multiple daemons execute the same job.
   end
 
   def self.generate_state_helpers
@@ -80,6 +83,20 @@ class Job < ActiveRecord::Base
     return unless state.blank?
 
     self.state = "pending" 
+  end
+  
+  # Default priority is 5. Jobs will be executed in descending priority order.
+  def setup_priority
+    return unless priority.blank?
+    
+    self.priority = 5
+  end
+  
+  # Job will be executed after this timestamp.
+  def setup_start_at
+    return unless start_at.blank?
+    
+    self.start_at = Time.now
   end
 
 end  
