@@ -39,6 +39,8 @@ ruby ./script/generate background
 rake db:migrate
 ruby ./script/daemons start
 
+(To run background daemon in production mode use: RAILS_ENV=production ruby ./script/daemons start)
+
 then try in console:
     
 job_id = Job.enqueue!(ExampleWorker, :add, 1, 2).id
