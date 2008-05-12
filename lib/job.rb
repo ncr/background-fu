@@ -85,11 +85,11 @@ class Job < ActiveRecord::Base
     self.state = "pending" 
   end
   
-  # Default priority is 5. Jobs will be executed in descending priority order.
+  # Default priority is 0. Jobs will be executed in descending priority order (negative priorities allowed).
   def setup_priority
     return unless priority.blank?
     
-    self.priority = 5
+    self.priority = 0
   end
   
   # Job will be executed after this timestamp.
