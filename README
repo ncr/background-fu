@@ -7,12 +7,12 @@ See CHANGELOG for latest changes.
 GitHub:
   git://github.com/ncr/background-fu.git
 
-Lighthouse (free account required):
+Lighthouse:
   http://trix.lighthouseapp.com/projects/9809-backgroundfu/overview
     
 If you want to help improve this plugin, feel free to use above to contact me. Fork the project on GitHub, implement a feature, send me a pull request.
 
-Subversion (deprecated, will be available, but will not mirror github commits):
+Subversion (deprecated, does not mirror GitHub commits):
   https://svn.trix.pl/public/background_fu/
   
 
@@ -28,6 +28,7 @@ These features are:
  * stopping a running worker in a merciful way.
 
 Read the code (short and easy) to discover them.
+
 
 Quick Start
 ===========
