@@ -1,1 +1,3 @@
+* 2008-05-12 Added excessive logging and changed default priority to 0 (Negative priorities allowed). [ncr]
+
 * 2008-05-11 Added three columns to Job model: priority (execute jobs in priority descending order), start_at (execute jobs after start_at), lock_version (ensure job is executed by a single daemon). [ncr]
