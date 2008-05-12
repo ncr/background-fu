@@ -38,17 +38,23 @@ module Job::BonusFeatures
   # 5. The job catches the :stopping symbol and reacts upon it.
   # 6. The job is stopped in a merciful way. No one gets harmed.
   def stop!
-    update_attribute(:state, "stopping") if running?
+    if running?
+      update_attribute(:state, "stopping")
+      logger.info("BackgroundFu: Stopping job. Job(id: #{id}).")
+    end
   end
   
   # Overwritten because of new "stopped" state.
   def restart_with_threads!
-    update_attributes!(
-      :result     => nil, 
-      :progress   => nil, 
-      :started_at => nil, 
-      :state      => "pending"
-    ) if stopped? || failed?
+    if stopped? || failed?
+      update_attributes!(
+        :result     => nil, 
+        :progress   => nil, 
+        :started_at => nil, 
+        :state      => "pending"
+      ) 
+      logger.info("BackgroundFu: Restarting job. Job(id: #{id}).")
+    end
   end
 
   # This is the only place where multi-threading 
@@ -73,6 +79,7 @@ module Job::BonusFeatures
         @worker.instance_variable_set("@stopping", true)
       end
     end
+    logger.info("BackgroundFu: Job monitoring started. Job(id: #{id}).")
   end
 
   # Closes database connections left after finished threads.

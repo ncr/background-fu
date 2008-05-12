@@ -15,11 +15,12 @@ class Job < ActiveRecord::Base
   attr_readonly :worker_class, :worker_method, :args
   
   def self.enqueue!(worker_class, worker_method, *args)
-    create!(
+    job = create!(
       :worker_class  => worker_class.to_s,
       :worker_method => worker_method.to_s,
       :args          => args
     )
+    logger.info("BackgroundFu: Job enqueued. Job(id: #{job.id}, worker: #{worker_class}, method: #{worker_method}, argc: #{args.size}).")
   end
 
   # Invoked by a background daemon.
@@ -34,27 +35,33 @@ class Job < ActiveRecord::Base
   
   # Restart a failed job.
   def restart!
-    update_attributes!(
-      :result     => nil, 
-      :progress   => nil, 
-      :started_at => nil, 
-      :state      => "pending"
-    ) if failed? 
+    if failed? 
+      update_attributes!(
+        :result     => nil, 
+        :progress   => nil, 
+        :started_at => nil, 
+        :state      => "pending"
+      )
+      logger.info("BackgroundFu: Job restarted. Job(id: #{id}).")
+    end
   end
   
   def initialize_worker
     update_attributes!(:started_at => Time.now, :state => "running")
     @worker = worker_class.constantize.new
+    logger.info("BackgroundFu: Job initialized. Job(id: #{id}).")
   end
   
   def invoke_worker
     self.result = @worker.send!(worker_method, *args)
     self.state  = "finished"
+    logger.info("BackgroundFu: Job finished. Job(id: #{id}).")
   end
   
   def rescue_worker(exception)
     self.result = [exception.message, exception.backtrace.join("\n")].join("\n\n")
     self.state  = "failed"
+    logger.info("BackgroundFu: Job failed. Job(id: #{id}).")
   end
   
   def ensure_worker
@@ -63,6 +70,7 @@ class Job < ActiveRecord::Base
   rescue StaleObjectError
     # Ignore this exception as its only purpose is
     # not allowing multiple daemons execute the same job.
+    logger.info("BackgroundFu: Race condition handled (It's OK). Job(id: #{id}).")
   end
 
   def self.generate_state_helpers
