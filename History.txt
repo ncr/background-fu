@@ -1,3 +1,7 @@
+=== 1.0.1 / 2008-05-27
+
+* Updaed README with install instructions.
+
 === 1.0.0 / 2008-05-27
 
 * BackgroundFu is now also a gem. You should check Rails 2.1 and the super sexy gems vendoring features!
