@@ -1,5 +1,5 @@
 Gem::Specification.new do |s|
-  s.name = %q{background_fu}
+  s.name = %q{background-fu}
   s.version = "1.0.1"
 
   s.specification_version = 2 if s.respond_to? :specification_version=
@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.has_rdoc = false
   s.homepage = %q{http://github.com/ncr/background-fu}
   s.require_paths = ["lib"]
-  s.rubyforge_project = %q{background_fu}
+  s.rubyforge_project = %q{background-fu}
   s.rubygems_version = %q{1.1.0}
   s.summary = %q{Background tasks in Ruby On Rails made dead simple.}
 

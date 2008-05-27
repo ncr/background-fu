@@ -1,6 +1,10 @@
+=== 1.0.2 / 2008-05-27
+
+* Fiddling with gemspec to make it work on GitHub. [ncr]
+
 === 1.0.1 / 2008-05-27
 
-* Updaed README with install instructions.
+* Updaed README with install instructions. [ncr]
 
 === 1.0.0 / 2008-05-27
 
