@@ -1,0 +1,8 @@
+=== 1.0.0 / 2008-05-27
+
+* BackgroundFu is now also a gem. You should check Rails 2.1 and the super sexy gems vendoring features!
+
+  * Updated README.txt so now it looks like those from gems. [ncr]
+  * Previous changes before becoming a gem:
+  * 2008-05-12 Added excessive logging and changed default priority to 0 (Negative priorities allowed). [ncr]
+  * 2008-05-11 Added three columns to Job model: priority (execute jobs in priority descending order), start_at (execute jobs after start_at), lock_version (ensure job is executed by a single daemon). [ncr]

@@ -1,6 +1,8 @@
-require File.dirname(__FILE__) + '/../rspec/lib/spec/rake/spectask'
+require 'rubygems'
+require 'hoe'
+require './lib/background_fu.rb'
 
-desc "Run all plugin specs"
-Spec::Rake::SpecTask.new(:spec) do |t|
-  t.spec_files = FileList['spec/**/*_spec.rb']
+Hoe.new('background_fu', BackgroundFu::VERSION) do |p|
+  p.rubyforge_name = 'background_fu'
+  p.developer('Jacek Becela', 'jacek.becela@gmail.com')
 end

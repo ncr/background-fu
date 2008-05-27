@@ -1,5 +1,5 @@
 module BackgroundFu
   
-  # Whitespace good!
+  VERSION = "1.0.0"
   
 end
