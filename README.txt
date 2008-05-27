@@ -26,8 +26,6 @@ Background tasks in Ruby On Rails made dead simple.
 
 == SYNOPSIS:
 
-  ./script/plugin install git://github.com/ncr/background-fu.git
-
   ruby ./script/generate background
   rake db:migrate
   
@@ -135,7 +133,8 @@ Read the code (short and easy) to discover them.
 
 == INSTALL:
 
-* FIX (sudo gem install, anything else)
+* As a Rails plugin: ./script/plugin install git://github.com/ncr/background-fu.git
+* As as a gem to be 'vendorized' starting from Rails 2.1: refer to documentation on rake gems:unpack:dependencies.
 
 == CONTRIBUTING:
 
