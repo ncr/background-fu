@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://github.com/ncr/background-fu}
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{background-fu}
-  s.rubygems_version = %q{1.1.0}
+  s.rubygems_version = %q{1.1.1}
   s.summary = %q{Background tasks in Ruby On Rails made dead simple.}
 
   s.add_dependency(%q<daemons>, [">= 1.0.9"])
