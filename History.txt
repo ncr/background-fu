@@ -1,3 +1,8 @@
+=== 1.0.3 / 1008-05-28
+
+* GitHub is now generating a gem. [ncr]
+* Making sure that it will work as a plugin when installed as a gem. [ncr]
+
 === 1.0.2 / 2008-05-27
 
 * Fiddling with gemspec to make it work on GitHub. [ncr]

@@ -20,8 +20,8 @@ generators/background/templates/scaffold/index.html.erb
 generators/background/templates/scaffold/jobs.html.erb
 generators/background/templates/scaffold/jobs_controller.rb
 generators/background/templates/scaffold/jobs_helper.rb
-init.rb
 lib/background_fu.rb
 lib/background_fu/worker_monitoring.rb
 lib/job.rb
 lib/job/bonus_features.rb
+rails/init.rb
