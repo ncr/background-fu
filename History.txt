@@ -1,4 +1,4 @@
-=== 1.0.3 / 1008-05-28
+=== 1.0.4 / 1008-05-28
 
 * GitHub is now generating a gem. [ncr]
 * Making sure that it will work as a plugin when installed as a gem. [ncr]
