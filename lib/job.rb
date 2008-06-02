@@ -20,7 +20,10 @@ class Job < ActiveRecord::Base
       :worker_method => worker_method.to_s,
       :args          => args
     )
+
     logger.info("BackgroundFu: Job enqueued. Job(id: #{job.id}, worker: #{worker_class}, method: #{worker_method}, argc: #{args.size}).")
+    
+    job
   end
 
   # Invoked by a background daemon.

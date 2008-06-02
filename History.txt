@@ -1,4 +1,9 @@
-=== 1.0.4 / 1008-05-28
+=== 1.0.5 / 2008-06-02
+
+* Fixed enqueue method (now properly returns enqueued job). [Jake Yoon, ncr]
+* Fixed background.rb generator so it doens't blow up if Bonus Features are disabled. [Jake Yoon, ncr]
+
+=== 1.0.4 / 2008-05-28
 
 * GitHub is now generating a gem. [ncr]
 * Making sure that it will work as a plugin when installed as a gem. [ncr]
