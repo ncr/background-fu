@@ -1,3 +1,7 @@
+=== 1.0.6 / 2008-07-03
+
+* Updated docs to mention config/routes.rb. [Joe Goldwasser, ncr]
+
 === 1.0.5 / 2008-06-02
 
 * Fixed enqueue method (now properly returns enqueued job). [Jake Yoon, ncr]

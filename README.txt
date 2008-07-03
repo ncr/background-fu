@@ -39,6 +39,14 @@ Background tasks in Ruby On Rails made dead simple.
   # after few seconds when background daemon completes the job
 
   Job.find(job_id).result # result of the job should equal 3
+  
+  If you want to use default generated views, update your config/routes.rb:
+  
+  map.namespace "admin" do |admin|
+    admin.resources :jobs
+  end
+  
+  Then you can point your browser to http://localhost:3000/admin/jobs
 
 == EXAMPLES:
 
