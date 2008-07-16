@@ -28,10 +28,13 @@ class BackgroundGenerator < Rails::Generator::Base
         m.directory 'app/views/admin/jobs'
         m.directory 'app/views/layouts/admin'
 
-        m.file 'scaffold/jobs_controller.rb', 'app/controllers/admin/jobs_controller.rb'
-        m.file 'scaffold/jobs_helper.rb',     'app/helpers/admin/jobs_helper.rb'
+        m.file 'scaffold/application_controller.rb', 'app/controllers/admin/application_controller.rb'
+        m.file 'scaffold/jobs_controller.rb',        'app/controllers/admin/jobs_controller.rb'
+        m.file 'scaffold/jobs_helper.rb',            'app/helpers/admin/jobs_helper.rb'
 
         m.file 'scaffold/index.html.erb',               'app/views/admin/jobs/index.html.erb'
+        m.file 'scaffold/new.html.erb',                 'app/views/admin/jobs/new.html.erb'
+        m.file 'scaffold/_form.html.erb',               'app/views/admin/jobs/_form.html.erb'
         m.file 'scaffold/_job.html.erb',                'app/views/admin/jobs/_job.html.erb'
         m.file 'scaffold/_job_deleted.html.erb',        'app/views/admin/jobs/_job_deleted.html.erb'
         m.file 'scaffold/_progress_indicator.html.erb', 'app/views/admin/jobs/_progress_indicator.html.erb'
