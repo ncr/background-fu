@@ -1,0 +1,10 @@
+<%= error_messages_for :job %>
+<% form_for(:job, :html => {:class => "job"}) do |f| %>
+  <%= f.label :worker_class %><br />
+  <%= f.text_field :worker_class, :class => "worker-class" %><br />
+  <%= f.label :worker_method %><br />
+  <%= f.text_field :worker_method, :class => "worker-method" %><br />
+  <%= f.label :args, "Args - each line (including empty) is interpreted as a string argument" %><br />
+  <%= f.text_area :args %><br />
+  <%= f.submit "Enqueue", :class => "button" %>
+<% end %>

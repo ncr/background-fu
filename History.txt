@@ -1,3 +1,9 @@
+=== 1.0.7 / 2008-07-16
+
+* Fixed and refactored scaffolding. [ncr]
+* Removed deprecated Dependencies usage. [ncr]
+* Updated links in footer. [ncr]
+
 === 1.0.6 / 2008-07-03
 
 * Updated docs to mention config/routes.rb. [Joe Goldwasser, ncr]

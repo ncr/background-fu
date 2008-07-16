@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = %q{background_fu}
-  s.version = "1.0.6"
+  s.version = "1.0.7"
 
   s.specification_version = 2 if s.respond_to? :specification_version=
 
