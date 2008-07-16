@@ -125,7 +125,7 @@ Background tasks in Ruby On Rails made dead simple.
 == BONUS FEATURES:
 
 There are bonus features available if you set
-ActiveRecord::Base.allow_concurrency = true 
+config.active_record.allow_concurrency = true
 in your environment.
 
 These features are: 

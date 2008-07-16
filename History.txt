@@ -1,5 +1,6 @@
 === 1.0.7 / 2008-07-16
 
+* Updated docs and fixed a bug regarding started_at and Time.now.utc (the lack of #utc in some places resulted in jobs not starting). [Jeff Berg, ncr]
 * Fixed and refactored scaffolding. [ncr]
 * Removed deprecated Dependencies usage. [ncr]
 * Updated links in footer. [ncr]

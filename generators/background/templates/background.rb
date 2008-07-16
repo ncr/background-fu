@@ -11,7 +11,7 @@ else
 end
 
 loop do
-  if job = Job.find(:first, :conditions => ["state='pending' and start_at <= ?", Time.now], :order => "priority desc, start_at asc")
+  if job = Job.find(:first, :conditions => ["state='pending' and start_at <= ?", Time.now.utc], :order => "priority desc, start_at asc")
     job.get_done!
   else
     RAILS_DEFAULT_LOGGER.info("BackgroundFu: Waiting for jobs...")
