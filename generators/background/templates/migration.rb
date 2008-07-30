@@ -5,6 +5,8 @@ class CreateJobs < ActiveRecord::Migration
       t.string  :worker_method
       
       t.text    :args
+      t.text    :result
+
       t.integer :priority
 
       t.integer :progress
@@ -15,8 +17,6 @@ class CreateJobs < ActiveRecord::Migration
       t.timestamp :start_at
       t.timestamp :started_at
       t.timestamps
-      
-      t.columns << 'result longtext' # text can store 65kb only, it's often too short
     end
 
     add_index :jobs, :state

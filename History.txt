@@ -1,3 +1,7 @@
+=== 1.0.8 / 2008-07-30
+
+* Reverted back to "text" column for storing job results so it works on PostgreSQL. [Trevor Turk, ncr]
+
 === 1.0.7 / 2008-07-16
 
 * Updated docs and fixed a bug regarding started_at and Time.now.utc (the lack of #utc in some places resulted in jobs not starting). [Jeff Berg, ncr]
