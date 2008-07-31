@@ -1,3 +1,7 @@
+=== Master / 2008-07-31
+
+* Make it clear that generated views are meant to be used when bonus features are enabled. [Trevor Turk, ncr]
+
 === 1.0.8 / 2008-07-30
 
 * Reverted back to "text" column for storing job results so it works on PostgreSQL. [Trevor Turk, ncr]
