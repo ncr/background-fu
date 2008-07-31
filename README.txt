@@ -17,7 +17,7 @@ Background tasks in Ruby On Rails made dead simple.
 * Clean and straightforward approach (database-based priority queue).
 * Uses database table (migration included) to store jobs reliably.
 * Capistrano tasks included. 
-* Generators with migrations and example views included.
+* Generators with migrations and example views included (to be used with concurrency enabled).
 * Multiple worker daemons available.
 * Easy to deploy in distributed environments.
 * Enables prioritizing and simple scheduling.
@@ -131,6 +131,8 @@ in your environment.
 These features are: 
  * monitoring progress (perfect for ajax progress bars)
  * stopping a running worker in a merciful way.
+ 
+Generated admin views are meant to be used only when bonus features (concurrency) are enabled.
 
 Read the code (short and easy) to discover them.
 
