@@ -13,6 +13,16 @@ class Job < ActiveRecord::Base
   validates_presence_of :worker_class, :worker_method
   
   attr_readonly :worker_class, :worker_method, :args
+
+  def validate
+    validate_crontab unless crontab.blank?
+  end
+
+  def validate_crontab
+    Cron.parse(crontab)
+  rescue ArgumentError, RangeError => e
+    errors.add :crontab, e.to_s
+  end
   
   def self.enqueue!(worker_class, worker_method, *args)
     job = create!(
@@ -69,11 +79,18 @@ class Job < ActiveRecord::Base
   
   def ensure_worker
     self.progress = @worker.instance_variable_get("@progress")
+    schedule unless crontab.blank?
     save!
   rescue StaleObjectError
     # Ignore this exception as its only purpose is
     # not allowing multiple daemons execute the same job.
     logger.info("BackgroundFu: Race condition handled (It's OK). Job(id: #{id}).")
+  end
+
+  def schedule
+    self.state = self.start_at = nil
+    setup_state
+    setup_start_at
   end
 
   def self.generate_state_helpers
@@ -107,7 +124,11 @@ class Job < ActiveRecord::Base
   def setup_start_at
     return unless start_at.blank?
     
-    self.start_at = Time.now.utc
+    if crontab.blank?
+      self.start_at = Time.now.utc
+    else
+      self.start_at = Cron.find_next_time(Time.now, crontab)
+    end
   end
 
 end  
