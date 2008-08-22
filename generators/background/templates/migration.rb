@@ -3,8 +3,6 @@ class CreateJobs < ActiveRecord::Migration
     create_table :jobs do |t|
       t.string  :worker_class
       t.string  :worker_method
-
-      t.string  :crontab
       
       t.text    :args
       t.text    :result
