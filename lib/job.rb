@@ -1,6 +1,7 @@
 # Example:
 # 
 # job = Job.enqueue!(MyWorker, :my_method, "my_arg_1", "my_arg_2")
+# job = Job.enqueue_with_crontab!(crontab, MyWorker, :my_method, "my_arg_1", "my_arg_2")
 class Job < ActiveRecord::Base
 
   cattr_accessor :states
@@ -26,6 +27,19 @@ class Job < ActiveRecord::Base
   
   def self.enqueue!(worker_class, worker_method, *args)
     job = create!(
+      :worker_class  => worker_class.to_s,
+      :worker_method => worker_method.to_s,
+      :args          => args
+    )
+
+    logger.info("BackgroundFu: Job enqueued. Job(id: #{job.id}, worker: #{worker_class}, method: #{worker_method}, argc: #{args.size}).")
+    
+    job
+  end
+
+  def self.enqueue_with_crontab!(crontab, worker_class, worker_method, *args)
+    job = create!(
+      :crontab       => crontab,
       :worker_class  => worker_class.to_s,
       :worker_method => worker_method.to_s,
       :args          => args
