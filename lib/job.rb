@@ -50,7 +50,7 @@ class Job < ActiveRecord::Base
   end
   
   def initialize_worker
-    update_attributes!(:started_at => Time.now.utc, :state => "running")
+    update_attributes!(:started_at => Time.now, :state => "running")
     @worker = worker_class.constantize.new
     logger.info("BackgroundFu: Job initialized. Job(id: #{id}).")
   end
@@ -107,7 +107,7 @@ class Job < ActiveRecord::Base
   def setup_start_at
     return unless start_at.blank?
     
-    self.start_at = Time.now.utc
+    self.start_at = Time.now
   end
 
 end  
