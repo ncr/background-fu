@@ -58,13 +58,11 @@ module Job::BonusFeatures
     end
   end
 
-  # This is the only place where multi-threading 
-  # is used in the plugin and is completely optional.
+  # Monitors the worker and updates the job progress.  If the job's status
+  # is changed to 'stopping', the worker is requested to stop.
   def monitor_worker
     Thread.new do
-      # 1. running? - check if not failed or finished.
-      # 2. !Job.find(id).stopping? - check if someone ordered stopping the job.  
-      while(running? && !Job.find(id).stopping?)
+      while running? && !Job.find(id).stopping?
         current_progress = @worker.instance_variable_get("@progress")
 
         if current_progress == progress
@@ -75,11 +73,11 @@ module Job::BonusFeatures
         end
       end
 
-      # If someone ordered stopping a job we infrom the worker that it should stop.
-      if(Job.find(id).stopping?)
+      if Job.find(id).stopping?
         @worker.instance_variable_set("@stopping", true)
       end
     end
+    
     logger.info("BackgroundFu: Job monitoring started. Job(id: #{id}).")
   end
 
