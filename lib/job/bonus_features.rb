@@ -45,7 +45,7 @@ module Job::BonusFeatures
     end
   end
   
-  # Overwritten because of new "stopped" state.
+  # Overridden because of new "stopped" state.
   def restart_with_threads!
     if stopped? || failed?
       update_attributes!(
