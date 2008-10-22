@@ -1,3 +1,7 @@
+=== 1.0.9 / 2008-10-22
+
+* Merged a few important fixes from Keith Morrison. Bumped version, fixed gemspec (thanks  森山 誠二郎). Closes #4. [Keith Morrison, 森山 誠二郎, ncr]
+
 === Master / 2008-07-31
 
 * Make it clear that generated views are meant to be used when bonus features are enabled. [Trevor Turk, ncr]
