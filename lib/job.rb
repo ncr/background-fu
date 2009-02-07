@@ -56,7 +56,7 @@ class Job < ActiveRecord::Base
   end
   
   def invoke_worker
-    self.result = @worker.send!(worker_method, *args)
+    self.result = @worker.send(worker_method, *args)
     self.state  = "finished"
     logger.info("BackgroundFu: Job finished. Job(id: #{id}).")
   end
