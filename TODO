@@ -1,0 +1,2 @@
+1. Deprecate daemons and use: http://github.com/kennethkalmer/daemon-kit/
+2. Add a test suite.

@@ -1,5 +1,8 @@
-=== Master / 2008-11-06
 
+
+=== 1.0.10 / 2009-02-07
+
+* Compatibility fixes for Rails 2.2.2. [infused, ovelar, ncr]
 * Allow concurrency is deprecated in Rails 2.2 so we check if we can use it. (thanks fixlr).
 
 === 1.0.9 / 2008-10-22

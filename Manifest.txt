@@ -28,3 +28,5 @@ lib/background_fu/worker_monitoring.rb
 lib/job.rb
 lib/job/bonus_features.rb
 rails/init.rb
+test/job_test.rb
+test/test_helper.rb
