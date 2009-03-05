@@ -3,3 +3,6 @@ dir: ../../log
 multiple: false
 backtrace: true
 monitor: true
+background_fu:
+  cleanup_interval: :on_startup # :on_startup or :continuous
+  monitor_interval: 5           # seconds between checks for queued jobs

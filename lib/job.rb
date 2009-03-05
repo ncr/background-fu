@@ -76,6 +76,12 @@ class Job < ActiveRecord::Base
     logger.info("BackgroundFu: Race condition handled (It's OK). Job(id: #{id}).")
   end
 
+  # Delete finished jobs that are more than a week old.
+  def self.cleanup_finished_jobs
+    logger.info "BackgroundFu: Cleaning up finished jobs."
+    Job.destroy_all(["state='finished' and updated_at < ?", 1.week.ago])
+  end
+  
   def self.generate_state_helpers
     states.each do |state_name|
       define_method("#{state_name}?") do

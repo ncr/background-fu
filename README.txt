@@ -122,7 +122,19 @@ Background tasks in Ruby On Rails made dead simple.
     run "RAILS_ENV=production ruby #{current_path}/script/daemons stop"
     run "RAILS_ENV=production ruby #{current_path}/script/daemons start"
   end
+
+== CONFIGURATION:
+
+  By default, completed background jobs that are more than one week old
+  will be cleaned out of the database on application startup, and the daemon
+  will check for queued background jobs every 5 seconds.
   
+  To override these settings, modify your config/daemons.yml file:
+  
+  background_fu:
+    cleanup_interval: :on_startup # :on_startup | :continuous
+    monitor_interval: 5           # Check every x seconds
+
 == BONUS FEATURES:
 
 There are bonus features available if you set
