@@ -4,6 +4,9 @@
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path(File.join(File.dirname(__FILE__), %w[.. .. .. .. config environment]))
 require 'spec/rails'
+require 'shoulda'
+require 'shoulda/active_record'
+
 
 # Uncomment the next line to use webrat's matchers
 require 'webrat/integrations/rspec-rails'
