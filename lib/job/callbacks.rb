@@ -1,7 +1,11 @@
 module Job::Callbacks
   def self.included(base)
+    befores   = %w/invoke/
+    afters    = %w/invoke/ 
+    cb_points = {:before => befores, :after => afters}
+      
     base.extend(ClassMethods)
-    base.generate_callback_cls_methods
+    base.setup_callbacks_for cb_points
     base.alias_method_chain :invoke_worker, :callbacks
   end
 
@@ -11,56 +15,50 @@ module Job::Callbacks
     call_after_invokes
   end
 
-  private
-
-    def call_before_invokes
-      if has_before_invokes?
-        self.class.callbacks[:invoke][:before].each do |method|
-          self.send(method)
-        end
-      end
-    end
-
-    def call_after_invokes
-      if has_after_invokes?
-        self.class.callbacks[:invoke][:after].each do |method|
-          self.send(method)
-        end
-      end
-    end
-
-    def has_after_invokes?
-      if invokes = self.class.callbacks[:invoke]
-        return invokes.has_key? :after
-      end
-    end
-
-    def has_before_invokes?
-      if invokes = self.class.callbacks[:invoke]
-        return invokes.has_key? :before
-      end 
-    end
-
   module ClassMethods
-
-    def generate_callback_cls_methods
-      befores   = %w/invoke/
-      afters    = %/invoke/ 
-      cb_points = {:before => befores, :after => afters}
-      
-      cb_points.each_pair do |whn, methods| 
+    
+    def setup_callbacks_for(callback_points)
+      callback_points.each_pair do |whn, methods| 
         methods.each do |method|
-          (class << self; self; end).instance_eval do 
-            define_method "#{whn}_#{method}".to_sym  do |*do_methods| 
-              do_methods.each do |do_method|
-                set_callback(method.to_sym, whn, do_method)
-              end
-            end
+          generate_callback_cls_method(whn, method)
+          generate_callback_checker(whn, method)
+          generate_callback_caller(whn, method)
+        end
+      end
+    end
+
+    def generate_callback_cls_method(whn, method)
+      (class << self; self; end).instance_eval do 
+        define_method "#{whn}_#{method}".to_sym  do |*do_methods| 
+          do_methods.each do |do_method|
+            set_callback(method.to_sym, whn, do_method)
           end
         end
       end
     end
-    
+
+    def generate_callback_checker(whn, method)
+      define_method callback_checker_name(whn, method) do
+        if for_method = self.class.callbacks[method.to_sym]
+          return for_method.has_key?(whn)
+        end
+      end
+    end
+
+    def generate_callback_caller(whn, method)
+      define_method "call_#{whn}_#{method}s" do
+        if send(self.class.callback_checker_name(whn, method))
+          self.class.callbacks[method.to_sym][whn].each do |do_method|
+            send(do_method)
+          end
+        end
+      end
+    end
+
+    def callback_checker_name(whn, method)
+      "has_#{whn}_#{method}s?".to_sym
+    end
+
     def callbacks
       @callbacks ||= {}
     end
@@ -80,5 +78,6 @@ module Job::Callbacks
         callbacks[for_method][whn] ||= []
         callbacks[for_method][whn] << do_method
       end
+
   end
 end
