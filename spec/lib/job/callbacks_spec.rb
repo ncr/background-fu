@@ -23,27 +23,8 @@ describe Job, "Callbacks" do
     subject.clear_callbacks!
     subject.callbacks.should == {}
   end
-  describe "before_invoke" do    
-    before(:each) do
-      subject.clear_callbacks!
-    end
-    it "takes a symbol representing a method to call" do
-      subject.send(:before_invoke, :method1)
-    end
-    it "takes a list of symbols representing methods to call" do
-      subject.send(:before_invoke, :method1, :method2)
-    end
-    describe "callback" do
-      let(:cb_methods) { [:method1, :method2, :method3] }
-      before(:each) do
-        subject.send(:before_invoke, *cb_methods)
-      end
-      it "calls each method in order" do
-        cb_methods.each do |method|
-          some_instance.should_receive(method).ordered
-        end
-        some_instance.invoke_worker
-      end      
-    end
+  describe "before_invoke" do       
+    let (:callback_point) { :before_invoke }
+    it_should_behave_like "Any CB Point"
   end
 end
