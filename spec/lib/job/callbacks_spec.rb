@@ -27,4 +27,8 @@ describe Job, "Callbacks" do
     let (:callback_point) { :before_invoke }
     it_should_behave_like "Any CB Point"
   end
+  describe "after_invoke" do
+    let (:callback_point) { :after_invoke }
+    it_should_behave_like "Any CB Point"
+  end
 end
