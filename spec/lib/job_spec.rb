@@ -45,6 +45,7 @@ describe Job do
     end
     context "invocation" do
       before(:each) do
+        ExampleWorker.stub(:new).and_return(mock(ExampleWorker, :add => 1))
         @job.initialize_worker
       end
       it "calls the worker method on the given worker with the given args" do

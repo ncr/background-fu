@@ -17,6 +17,7 @@ shared_examples_for "Any CB Point" do
       cb_methods.each do |method|
         some_instance.should_receive(method).ordered
       end
+      some_instance.initialize_worker
       some_instance.invoke_worker
     end      
   end
