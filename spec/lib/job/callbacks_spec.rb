@@ -28,7 +28,7 @@ describe Job, "Callbacks" do
     subject.clear_callbacks!
     subject.callbacks.should == {}
   end
-  describe "after_initialize" do
+  describe "after_init" do
     let(:callback_point) { :after_init }
     it_should_behave_like "Any CB Point"
   end
