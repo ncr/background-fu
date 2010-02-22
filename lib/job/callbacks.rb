@@ -17,8 +17,24 @@ module Job::Callbacks
 
   def invoke_worker_with_callbacks
     call_before_invokes
+    call_simple_worker_before_magic
     invoke_worker_without_callbacks
+    call_simple_worker_after_magic
     call_after_invokes
+  end
+
+  private
+
+  def call_simple_worker_before_magic
+    @worker.send(magic_worker_method(:before)) if @worker.respond_to? magic_worker_method(:before)
+  end
+
+  def call_simple_worker_after_magic
+    @worker.send(magic_worker_method(:after)) if @worker.respond_to? magic_worker_method(:after)
+  end
+
+  def magic_worker_method(whn)
+    "#{whn}_#{worker_method}".to_sym 
   end
 
   module ClassMethods

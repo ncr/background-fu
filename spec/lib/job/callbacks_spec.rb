@@ -15,8 +15,9 @@ describe Job, "Callbacks" do
     end
     job
   end
+  let(:worker_instance) {mock(ExampleWorker, :add => 3)}
   before(:each) do
-    ExampleWorker.stub(:new).and_return(mock(ExampleWorker, :add => 3))
+    ExampleWorker.stub(:new).and_return(worker_instance)
   end
   it "has a class method callbacks that returns the callback store" do 
     subject.should respond_to :callbacks
@@ -39,5 +40,23 @@ describe Job, "Callbacks" do
   describe "after_invoke" do
     let (:callback_point) { :after_invoke }
     it_should_behave_like "Any CB Point"
+  end
+  describe "magic hooks (worker hooks)" do
+    before(:each) do
+      some_instance.initialize_worker
+      worker_instance.stub(:before_add)
+    end
+    context "before and after" do
+      it "calls before_worker_method_name if defined before worker_method" do
+        worker_instance.should_receive(:before_add).ordered
+        worker_instance.should_receive(:add).ordered
+        some_instance.invoke_worker
+      end
+      it "calls after_worker_method_name if defined after worker_method" do
+        worker_instance.should_receive(:add).ordered
+        worker_instance.should_receive(:after_add).ordered
+        some_instance.invoke_worker
+      end
+    end
   end
 end
