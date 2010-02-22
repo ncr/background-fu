@@ -1,8 +1,11 @@
 require File.join(File.dirname(__FILE__), %w[.. spec_helper])
 
+
 describe Job do 
   before(:each) do
     @job = Job.enqueue!(ExampleWorker, :add, 1, 2)
+    #these specs ignore use of callbacks
+    Job.clear_callbacks!
   end
   #TODO DRY this up. Can't get the shoulda macros working
   specify { subject.should validate_presence_of :worker_class }
@@ -41,9 +44,22 @@ describe Job do
       end
     end
     context "invocation" do
-      it "calls the worker method on the given worker with the given args"
-      it "stores the result of the worker call"
-      it "changes the state to 'finished'"
+      before(:each) do
+        @job.initialize_worker
+      end
+      it "calls the worker method on the given worker with the given args" do
+        worker = @job.instance_variable_get("@worker")
+        worker.should_receive(:add).with(1,2)
+        @job.invoke_worker_without_threads
+      end
+      it "stores the result of the worker call" do
+        @job.invoke_worker_without_threads
+        @job.result.should == @job.worker_class.constantize.new.send(@job.worker_method, *@job.args)
+      end
+      it "changes the state to 'finished'" do
+        @job.invoke_worker_without_threads
+        @job.state.should == "finished"
+      end
     end
   end
 end
