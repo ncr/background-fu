@@ -1,13 +1,14 @@
 module Job::Callbacks
   def self.included(base)
-    befores   = %w/invoke/
-    afters    = %w/init invoke/ 
+    befores   = %w/invoke rescue/
+    afters    = %w/init invoke rescue/ 
     cb_points = {:before => befores, :after => afters}
       
     base.extend(ClassMethods)
     base.setup_callbacks_for cb_points
     base.alias_method_chain :initialize_worker, :callbacks
     base.alias_method_chain :invoke_worker, :callbacks
+    base.alias_method_chain :rescue_worker, :callbacks
   end
 
   def initialize_worker_with_callbacks
@@ -21,6 +22,12 @@ module Job::Callbacks
     invoke_worker_without_callbacks
     call_simple_worker_after_magic
     call_after_invokes
+  end
+
+  def rescue_worker_with_callbacks(exception)
+    call_before_rescues
+    rescue_worker_without_callbacks(exception)
+    call_after_rescues
   end
 
   private

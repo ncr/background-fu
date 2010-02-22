@@ -41,6 +41,20 @@ describe Job, "Callbacks" do
     let (:callback_point) { :after_invoke }
     it_should_behave_like "Any CB Point"
   end
+  describe "before_rescue" do 
+    let(:callback_point) { :before_rescue }
+    before(:each) do 
+      some_instance.stub(:invoke_worker).and_raise(Exception)
+    end
+    it_should_behave_like "Any CB Point"
+  end
+  describe "after_rescue" do
+    let(:callback_point) { :after_rescue }
+    before(:each) do
+      some_instance.stub(:invoke_worker).and_raise(Exception)
+    end
+    it_should_behave_like "Any CB Point"
+  end
   describe "magic hooks (worker hooks)" do
     before(:each) do
       some_instance.initialize_worker
