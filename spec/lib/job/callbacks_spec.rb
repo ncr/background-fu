@@ -55,6 +55,14 @@ describe Job, "Callbacks" do
     end
     it_should_behave_like "Any CB Point"
   end
+  describe "before_ensure" do
+    let(:callback_point) { :before_ensure }
+    it_should_behave_like "Any CB Point"
+  end
+  describe "after_ensure" do
+    let(:callback_point) { :after_ensure }
+    it_should_behave_like "Any CB Point"
+  end
   describe "magic hooks (worker hooks)" do
     before(:each) do
       some_instance.initialize_worker
