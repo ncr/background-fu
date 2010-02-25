@@ -7,3 +7,9 @@ module BackgroundFu
   CONFIG['monitor_interval'] ||= 10
   
 end
+
+require 'job'
+require 'background_fu/worker_monitoring'
+require 'background_fu/railtie' if defined?(Rails)
+
+
