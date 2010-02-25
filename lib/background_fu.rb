@@ -10,6 +10,6 @@ end
 
 require 'job'
 require 'background_fu/worker_monitoring'
-require 'background_fu/railtie' if defined?(Rails)
+require 'background_fu/railtie' if defined?(Rails) && Rails::VERSION == 3
 
 
