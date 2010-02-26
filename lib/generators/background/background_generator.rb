@@ -24,6 +24,8 @@ class BackgroundGenerator < Rails::Generators::Base
   def copy_daemons
     template 'background.rb', 'lib/daemons/background.rb'
     template 'background_ctl', 'lib/daemons/background_ctl'
+    template 'daemons', 'script/daemons'
+    template 'daemons.yml', 'config/daemons.yml'
   end
 
   def copy_examples
