@@ -7,7 +7,6 @@ begin
     gem.homepage = "http://github.com/ncr/background-fu"
     gem.authors = ["Jacek Becela"]
     gem.files = Dir["*", "{lib}/**/*"]
-    gem.add_dependency("daemons", ">= 1.0.10")
     gem.has_rdoc = true
     gem.extra_rdoc_files = ["History.txt", "Manifest.txt", "README.txt"]
   end
