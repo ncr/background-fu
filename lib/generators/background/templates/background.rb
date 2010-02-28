@@ -10,12 +10,12 @@ require File.dirname(__FILE__) + "/../config/environment"
 Signal.trap("TERM") { exit }
 
 puts "BackgroundFu: Starting up."
-#RAILS_DEFAULT_LOGGER.info("BackgroundFu: Starting daemon (bonus features #{Job.included_modules.include?(Job::BonusFeatures) ? "enabled" : "disabled"}).")
+Rails.logger.info("BackgroundFu: Starting background script") # (bonus features #{Job.included_modules.include?(Job::BonusFeatures) ? "enabled" : "disabled"}).")
 
 puts "With Config:"
 BackgroundFu::CONFIG.each do |k,v| 
   puts "\t#{k}: #{v.to_s}"
-#  RAILS_DEFAULT_LOGGER.info "BackgroundFu: #{k}: #{v.to_s}"
+  Rails.logger.info "BackgroundFu: #{k}: #{v.to_s}"
 end
 
 if BackgroundFu::CONFIG['cleanup_interval'] == :on_startup
@@ -29,7 +29,7 @@ loop do
     job.get_done!
   else
     puts "Waiting for jobs..."
-    #RAILS_DEFAULT_LOGGER.info("BackgroundFu: Waiting for jobs...")
+    Rails.logger.info("BackgroundFu: Waiting for jobs...")
     sleep BackgroundFu::CONFIG['monitor_interval']
   end
   Job.cleanup_finished_jobs if BackgroundFu::CONFIG['cleanup_interval'] == :continuous
