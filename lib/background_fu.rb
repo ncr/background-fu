@@ -9,8 +9,11 @@ module BackgroundFu
 end
 
 require 'background_fu/job'
+require 'background_fu/job/bonus_features'
 require 'background_fu/worker_monitoring'
 require 'background_fu/railtie' if defined?(Rails) && Rails::VERSION::MAJOR == 3
+
+Job.send(:include, Job::BonusFeatures)
 
 Dir["lib/workers/*_worker.rb"].each { |f| require f } 
 
