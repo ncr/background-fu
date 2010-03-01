@@ -8,8 +8,9 @@ module BackgroundFu
   
 end
 
-require 'job'
+require 'background_fu/job'
 require 'background_fu/worker_monitoring'
 require 'background_fu/railtie' if defined?(Rails) && Rails::VERSION::MAJOR == 3
-Dir["lib/workers/*"].each { |f| require f } 
+
+Dir["lib/workers/*_worker.rb"].each { |f| require f } 
 
